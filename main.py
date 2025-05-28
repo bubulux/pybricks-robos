@@ -1,11 +1,10 @@
-from pybricks.hubs import PrimeHub
-from pybricks.parameters import Color
+from pybricks.parameters import Port
+from pybricks.pupdevices import Motor
 from pybricks.tools import wait
 
+motor = Motor(Port.A)
 
-hub = PrimeHub()
-hub.light.on(Color.RED)
-wait(2000)
-print("I am", __name__)
-hub.light.on(Color.GREEN)
-wait(2000)
+while True:
+    motor.run(200)
+
+# wait(10 * 1000)
