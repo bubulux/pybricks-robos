@@ -1,21 +1,33 @@
-from pybricks.parameters import Port, Direction
-from pybricks.pupdevices import Motor
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Direction, Port
+from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
 from pybricks.tools import wait
 
-rightMotor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
-leftMotor = Motor(Port.E)
+# Set up all devices.
+prime_hub = PrimeHub()
+right_feel = ForceSensor(Port.C)
+left_feel = ForceSensor(Port.D)
+back_feel = ForceSensor(Port.A)
+color_sensor = ColorSensor(Port.B)
+right = Motor(Port.E, Direction.CLOCKWISE)
+left = Motor(Port.F, Direction.CLOCKWISE)
 
-rightMotor.run(300)
-leftMotor.run(300)
 
-wait(3 * 1000)
+# The main program starts here.
 
-rightMotor.run(-300)
-leftMotor.run(-300)
+# right.run(500)
+# left.run(500)
 
-wait(3 * 1000)
+def display_pixel():
+    prime_hub.display.pixel()
 
-rightMotor.run(300)
-leftMotor.run(-300)
-
-wait(3 * 1000)
+while True:
+    # print(f"Color: {color_sensor.hsv()}")
+    # print(f"Right PRESSED: {right_feel.pressed()}")
+    # print(f"Right TOUCHED: {right_feel.touched()}")
+    # print(f"Left PRESSED: {left_feel.pressed()}")
+    # print(f"Left TOUCHED: {left_feel.touched()}")
+    # print(f"Back PRESSED: {back_feel.pressed()}")
+    # print(f"Back TOUCHED: {back_feel.touched()}")
+    wait(1000)
+    pass
