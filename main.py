@@ -42,10 +42,12 @@ def isStop():
         return True
 
 def runForward():
+    print("Running forward")
     left.run(500)
     right.run(500)
 
 def runBackward():
+    print("Running backward")
     left.run(-500)
     right.run(-500)
 
