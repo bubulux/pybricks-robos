@@ -1,9 +1,9 @@
 from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
 
-from .modules.display import Display
-from .modules.movement import Movement
-from .modules.health import Health
+from core.modules.display import Display
+from core.modules.movement import Movement
+from core.modules.health import Health
 
 
 class Core:

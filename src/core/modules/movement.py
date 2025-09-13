@@ -1,5 +1,5 @@
 from pybricks.pupdevices import Motor
-from ..utils import speedConverter
+from core.utils import speedConverter
 
 
 class Movement:

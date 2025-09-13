@@ -2,7 +2,7 @@ from pybricks.hubs import PrimeHub
 from pybricks.parameters import Direction, Port
 from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
 
-from .core.index import Core
+from core.index import Core
 
 
 # Set up all devices.
