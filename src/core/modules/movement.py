@@ -14,17 +14,24 @@ class Movement:
         self, percent: int, direction: Literal["forward", "backward"], motor: Motor
     ):
         convertedSpeed = convertPercentToDegreesPerSecond(percent)
-        withDirection = convertedSpeed if direction == "forward" else -convertedSpeed
-        motor.run(withDirection)
+        if direction == "forward":
+            print(convertedSpeed)
+            motor.run(convertedSpeed)
+        else:
+            print(-convertedSpeed)
+            motor.run(-convertedSpeed)
 
     def stop(self):
+        print("stop")
         self._rightMotor.stop()
         self._leftMotor.stop()
 
     def forward(self, percent: int):
+        print("forward")
         self._controledMotor(percent, "forward", self._rightMotor)
         self._controledMotor(percent, "forward", self._leftMotor)
 
     def backward(self, percent: int):
+        print("backward")
         self._controledMotor(percent, "backward", self._rightMotor)
         self._controledMotor(percent, "backward", self._leftMotor)

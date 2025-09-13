@@ -47,7 +47,7 @@ def capture_robot_logs():
             log_file.flush()
 
             # Capture stdout in real-time
-            for line in iter(process.stdout.readline, ""):
+            for line in iter(process.stdout.readline, ""):  # type: ignore
                 if line:
                     timestamp_str = datetime.now().strftime("%H:%M:%S.%f")[
                         :-3
@@ -62,7 +62,7 @@ def capture_robot_logs():
                     print(f"\033[36m[{timestamp_str}]\033[0m {line.rstrip()}")
 
             # Capture any remaining stderr
-            stderr_output = process.stderr.read()
+            stderr_output = process.stderr.read()  # type: ignore
             if stderr_output:
                 error_entry = f"[ERROR] {stderr_output}\n"
                 log_file.write(error_entry)
@@ -74,7 +74,7 @@ def capture_robot_logs():
     except KeyboardInterrupt:
         print("\n🛑 Logging stopped by user")
         if "process" in locals():
-            process.terminate()
+            process.terminate()  # type: ignore
     except Exception as e:
         print(f"\n❌ Error occurred: {e}")
     finally:

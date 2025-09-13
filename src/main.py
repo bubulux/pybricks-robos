@@ -31,12 +31,14 @@ while True:
 
     core.movement.forward(10)
 
-    wait(1000 * 5)
+    wait(1000 * 2)
 
     core.movement.stop()
 
     wait(1000 * 2)
 
     core.movement.backward(10)
+
+    wait(1000 * 2)
 
     pass

@@ -13,7 +13,10 @@ pip install -r requirements.txt
 
 ## Deploy to PyBricks robot
 ```bash
-# Build and deploy in one command
+# Quick build and deploy script
+./deploy.sh
+
+# Or build and deploy in one command
 .venv/Scripts/python.exe build.py && python -m pybricksdev run ble -n bubulux build/main.py
 
 # Or deploy built version directly
