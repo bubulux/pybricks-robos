@@ -9,4 +9,4 @@ echo "Building project for PyBricks..."
 .venv/Scripts/python.exe utils/build.py
 
 echo "Starting monitoring of deployed version..."
-.venv\Scripts\python.exe utils/monitor.py
+.venv/Scripts/python.exe utils/monitor.py
