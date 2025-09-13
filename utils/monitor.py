@@ -12,6 +12,7 @@ def capture_robot_logs():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = f"logs/robot_log_{timestamp}.txt"
 
+    print("=" * 50)
     print("🎯 Listening to logs...")
     print(f"📁 Logging to: {log_filename}")
     print("🤖 Starting robot connection...")
@@ -34,9 +35,9 @@ def capture_robot_logs():
                 "build/main.py",
             ],
             stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            stderr=subprocess.STDOUT,  # Redirect stderr to stdout
             text=True,
-            bufsize=1,
+            bufsize=0,  # Unbuffered
             universal_newlines=True,
         )
 
@@ -46,27 +47,26 @@ def capture_robot_logs():
             log_file.write("=" * 50 + "\n")
             log_file.flush()
 
-            # Capture stdout in real-time
-            for line in iter(process.stdout.readline, ""):  # type: ignore
-                if line:
+            # Capture both stdout and stderr in real-time
+            while True:
+                output = process.stdout.readline()  # type: ignore
+                if output == "" and process.poll() is not None:
+                    break
+                if output:
                     timestamp_str = datetime.now().strftime("%H:%M:%S.%f")[
                         :-3
                     ]  # Include milliseconds
-                    log_entry = f"[{timestamp_str}] {line.rstrip()}\n"
+                    log_entry = f"[{timestamp_str}] {output.rstrip()}\n"
 
                     # Write to file
                     log_file.write(log_entry)
                     log_file.flush()
 
-                    # Print to console (with color for timestamp)
-                    print(f"\033[36m[{timestamp_str}]\033[0m {line.rstrip()}")
-
-            # Capture any remaining stderr
-            stderr_output = process.stderr.read()  # type: ignore
-            if stderr_output:
-                error_entry = f"[ERROR] {stderr_output}\n"
-                log_file.write(error_entry)
-                print(f"\033[31m[ERROR]\033[0m {stderr_output}")
+                    # Print to console (with color for timestamp) - ensure flushed
+                    print(
+                        f"\033[36m[{timestamp_str}]\033[0m {output.rstrip()}",
+                        flush=True,
+                    )
 
         # Wait for process to complete
         process.wait()

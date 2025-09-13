@@ -30,7 +30,7 @@ core = Core(
 while True:
     wait(1000 * 2)
 
-    core.movement.forward(10)
+    core.movement.forward(5)
 
     wait(1000 * 2)
 
@@ -38,8 +38,6 @@ while True:
 
     wait(1000 * 2)
 
-    core.movement.backward(10)
-
-    wait(1000 * 2)
+    core.movement.backward(5)
 
     pass
