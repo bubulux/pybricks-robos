@@ -1,5 +1,4 @@
 import subprocess
-import sys
 from datetime import datetime
 import os
 
@@ -13,9 +12,9 @@ def capture_robot_logs():
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_filename = f"logs/robot_log_{timestamp}.txt"
 
-    print(f"🎯 Listening to logs...")
+    print("🎯 Listening to logs...")
     print(f"📁 Logging to: {log_filename}")
-    print(f"🤖 Starting robot connection...")
+    print("🤖 Starting robot connection...")
     print("=" * 50)
 
     try:
@@ -73,7 +72,7 @@ def capture_robot_logs():
         process.wait()
 
     except KeyboardInterrupt:
-        print(f"\n🛑 Logging stopped by user")
+        print("\n🛑 Logging stopped by user")
         if "process" in locals():
             process.terminate()
     except Exception as e:
