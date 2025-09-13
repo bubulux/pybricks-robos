@@ -31,7 +31,7 @@ def capture_robot_logs():
                 "ble",
                 "-n",
                 "bubulux",
-                "src/main.py",
+                "build/main.py",
             ],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
