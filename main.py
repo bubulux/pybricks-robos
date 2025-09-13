@@ -15,5 +15,4 @@ left = Motor(Port.F, Direction.CLOCKWISE)
 
 
 while True:
-   
     pass
