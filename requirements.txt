@@ -1,2 +1,5 @@
 pybricksdev
 pybricks
+black
+flake8
+strip-hints
