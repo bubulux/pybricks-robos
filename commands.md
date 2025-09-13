@@ -1,1 +1,0 @@
-python -m pybricksdev run ble -n Sums main.py
