@@ -15,33 +15,43 @@ class Movement:
     ):
         convertedSpeed = convertPercentToDegreesPerSecond(percent)
         if direction == "forward":
-            print(convertedSpeed)
             motor.run(convertedSpeed)
         else:
-            print(-convertedSpeed)
             motor.run(-convertedSpeed)
 
     def stop(self):
-        print("stop")
         self._rightMotor.stop()
         self._leftMotor.stop()
 
     def forward(self, percent: int):
-        print("forward")
         self._controledMotor(percent, "forward", self._rightMotor)
         self._controledMotor(percent, "forward", self._leftMotor)
 
     def backward(self, percent: int):
-        print("backward")
         self._controledMotor(percent, "backward", self._rightMotor)
         self._controledMotor(percent, "backward", self._leftMotor)
 
     def turnLeft(self, percent: int):
-        print("turnLeft")
         self._controledMotor(percent, "forward", self._rightMotor)
         self._controledMotor(percent, "backward", self._leftMotor)
 
     def turnRight(self, percent: int):
-        print("turnRight")
         self._controledMotor(percent, "backward", self._rightMotor)
         self._controledMotor(percent, "forward", self._leftMotor)
+
+    def forwardLeft(self, dirPercent: int, tiltPercent: int):
+        # three cases
+        # 1. dirPercent is smaller tiltPercent -> OKAY, the higher the offset the higher the Angle
+        # 2. dirPercent is equal tiltPercent -> like Forward / Backward
+        # 3. dirPercent is larger tiltPercent -> would mean inverse, so forwardRight -> needs to be inversed
+        #
+
+        leftPercent = dirPercent
+        rightPercent = tiltPercent
+
+        if dirPercent > tiltPercent:
+            leftPercent = tiltPercent
+            rightPercent = dirPercent
+
+        self._controledMotor(leftPercent, "forward", self._leftMotor)
+        self._controledMotor(rightPercent, "forward", self._rightMotor)
