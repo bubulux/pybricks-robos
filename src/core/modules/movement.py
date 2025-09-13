@@ -35,3 +35,13 @@ class Movement:
         print("backward")
         self._controledMotor(percent, "backward", self._rightMotor)
         self._controledMotor(percent, "backward", self._leftMotor)
+
+    def turnLeft(self, percent: int):
+        print("turnLeft")
+        self._controledMotor(percent, "forward", self._rightMotor)
+        self._controledMotor(percent, "backward", self._leftMotor)
+
+    def turnRight(self, percent: int):
+        print("turnRight")
+        self._controledMotor(percent, "backward", self._rightMotor)
+        self._controledMotor(percent, "forward", self._leftMotor)

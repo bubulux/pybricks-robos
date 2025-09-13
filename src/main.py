@@ -28,16 +28,7 @@ core = Core(
 )
 
 while True:
-    wait(1000 * 2)
 
-    core.movement.forward(5)
-
-    wait(1000 * 2)
-
-    core.movement.stop()
-
-    wait(1000 * 2)
-
-    core.movement.backward(5)
+    core.movement.turnLeft(10)
 
     pass
