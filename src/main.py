@@ -1,6 +1,8 @@
 from pybricks.hubs import PrimeHub
 from pybricks.parameters import Direction, Port
 from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
+from pybricks.tools import wait
+
 
 from core.index import Core
 
@@ -11,8 +13,8 @@ rightFeel = ForceSensor(Port.C)
 leftFeel = ForceSensor(Port.D)
 backFeel = ForceSensor(Port.A)
 colorSensor = ColorSensor(Port.B)
-rightMotor = Motor(Port.E, Direction.COUNTERCLOCKWISE)
-leftMotor = Motor(Port.F, Direction.CLOCKWISE)
+rightMotor = Motor(Port.E, Direction.CLOCKWISE)
+leftMotor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
 
 
 core = Core(
@@ -28,5 +30,13 @@ core = Core(
 while True:
 
     core.movement.forward(10)
+
+    wait(1000 * 5)
+
+    core.movement.stop()
+
+    wait(1000 * 2)
+
+    core.movement.backward(10)
 
     pass
