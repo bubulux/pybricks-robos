@@ -1,6 +1,8 @@
 import subprocess
 from datetime import datetime
 import os
+import time
+from typing import TextIO
 
 
 def capture_robot_logs():
@@ -18,14 +20,16 @@ def capture_robot_logs():
     print("🤖 Starting robot connection...")
     print("=" * 50)
 
+    process = None
     try:
         # Use the Python executable from your virtual environment
         python_exe = r".venv\Scripts\python.exe"
 
-        # Start the robot program
+        # Start the robot program with additional buffering control
         process = subprocess.Popen(
             [
                 python_exe,
+                "-u",  # Force unbuffered output
                 "-m",
                 "pybricksdev",
                 "run",
@@ -39,6 +43,7 @@ def capture_robot_logs():
             text=True,
             bufsize=0,  # Unbuffered
             universal_newlines=True,
+            env={**os.environ, "PYTHONUNBUFFERED": "1"},
         )
 
         with open(log_filename, "w", encoding="utf-8") as log_file:
@@ -47,38 +52,78 @@ def capture_robot_logs():
             log_file.write("=" * 50 + "\n")
             log_file.flush()
 
-            # Capture both stdout and stderr in real-time
+            # Real-time monitoring using character-by-character reading
+            output_buffer = ""
+
             while True:
-                output = process.stdout.readline()  # type: ignore
-                if output == "" and process.poll() is not None:
+                # Check if process is still running
+                if process.poll() is not None:
+                    # Process has ended, read any remaining output
+                    remaining = process.stdout.read()  # type: ignore
+                    if remaining:
+                        output_buffer += remaining
+                        _process_buffer_lines(output_buffer, log_file)
                     break
-                if output:
-                    timestamp_str = datetime.now().strftime("%H:%M:%S.%f")[
-                        :-3
-                    ]  # Include milliseconds
-                    log_entry = f"[{timestamp_str}] {output.rstrip()}\n"
 
-                    # Write to file
-                    log_file.write(log_entry)
-                    log_file.flush()
+                # Read one character at a time for immediate processing
+                try:
+                    char = process.stdout.read(1)  # type: ignore
+                    if char:
+                        output_buffer += char
 
-                    # Print to console (with color for timestamp) - ensure flushed
-                    print(
-                        f"\033[36m[{timestamp_str}]\033[0m {output.rstrip()}",
-                        flush=True,
-                    )
+                        # Process complete lines immediately
+                        if char == "\n":
+                            lines = output_buffer.split("\n")
+                            # Process all complete lines
+                            # (all but the last, which might be incomplete)
+                            for line in lines[:-1]:
+                                if line:  # Skip empty lines
+                                    _write_log_entry(line, log_file)
+
+                            # Keep the last (potentially incomplete) line in buffer
+                            output_buffer = lines[-1]
+                    else:
+                        # No more data available right now,
+                        # small sleep to prevent busy waiting
+                        time.sleep(0.001)
+
+                except Exception as e:
+                    print(f"Error reading from process: {e}")
+                    break
 
         # Wait for process to complete
-        process.wait()
+        if process:
+            process.wait()
 
     except KeyboardInterrupt:
         print("\n🛑 Logging stopped by user")
-        if "process" in locals():
-            process.terminate()  # type: ignore
+        if process:
+            process.terminate()
     except Exception as e:
         print(f"\n❌ Error occurred: {e}")
     finally:
         print(f"📝 Log saved to: {log_filename}")
+
+
+def _process_buffer_lines(buffer: str, log_file: TextIO) -> None:
+    """Process any remaining lines in the buffer"""
+    lines = buffer.split("\n")
+    for line in lines:
+        if line.strip():  # Skip empty lines
+            _write_log_entry(line, log_file)
+
+
+def _write_log_entry(line: str, log_file: TextIO) -> None:
+    """Write a log entry with timestamp to both file and console"""
+    timestamp_str = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+    log_entry = f"[{timestamp_str}] {line.rstrip()}\n"
+
+    # Write to file immediately
+    log_file.write(log_entry)
+    log_file.flush()
+
+    # Print to console (with color for timestamp) - ensure flushed
+    print(f"\033[36m[{timestamp_str}]\033[0m {line.rstrip()}", flush=True)
 
 
 if __name__ == "__main__":
