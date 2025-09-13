@@ -27,5 +27,5 @@ class Core:
         self.leftMotor = leftMotor
 
         self.health = Health()
-        self.movement = Movement()
+        self.movement = Movement(self.rightMotor, self.leftMotor)
         self.display = Display()
