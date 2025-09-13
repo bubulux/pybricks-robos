@@ -28,6 +28,7 @@ core = Core(
 )
 
 while True:
+    wait(1000 * 2)
 
     core.movement.forward(10)
 

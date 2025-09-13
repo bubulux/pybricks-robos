@@ -6,7 +6,7 @@
 set -e  # Exit on any error
 
 echo "Building project for PyBricks..."
-.venv/Scripts/python.exe build.py
+.venv/Scripts/python.exe utils/build.py
 
 echo "Deploying to PyBricks robot 'bubulux'..."
 python -m pybricksdev run ble -n bubulux build/main.py
