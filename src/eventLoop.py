@@ -20,4 +20,4 @@ def eventLoop(
     # )
 
     core.feeler.listenForHits()
-    # core.health.check()
+    core.health.check()
