@@ -2,7 +2,7 @@ from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
 
 from core.modules.display import Display
-from core.modules.movement import Movement
+from core.modules.movement.index import Movement
 from core.modules.health import Health
 
 

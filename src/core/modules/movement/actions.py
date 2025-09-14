@@ -1,10 +1,10 @@
 from typing import Literal
 
 from pybricks.pupdevices import Motor
-from core.utils import convertPercentToDegreesPerSecond
+from core.modules.movement.utils import convertPercentToDegreesPerSecond
 
 
-class Movement:
+class Actions:
 
     def __init__(self, rightMotor: Motor, leftMotor: Motor):
         self._rightMotor = rightMotor
