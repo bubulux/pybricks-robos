@@ -40,12 +40,6 @@ class Movement:
         self._controledMotor(percent, "forward", self._leftMotor)
 
     def forwardLeft(self, dirPercent: int, tiltPercent: int):
-        # three cases
-        # 1. dirPercent is smaller tiltPercent -> OKAY, the higher the offset the higher the Angle
-        # 2. dirPercent is equal tiltPercent -> like Forward / Backward
-        # 3. dirPercent is larger tiltPercent -> would mean inverse, so forwardRight -> needs to be inversed
-        #
-
         leftPercent = dirPercent
         rightPercent = tiltPercent
 
