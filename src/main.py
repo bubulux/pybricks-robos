@@ -38,6 +38,10 @@ while True:
     isBackward, backwardPercent = controller.backward()
     tiltDirection, tiltPercent = controller.tilt()
 
+    if not isForward and not isBackward and tiltDirection == "neutral":
+        core.movement.stop()
+        continue
+
     if isForward and isBackward:
         if tiltDirection == "left":
             core.movement.turnLeft(tiltPercent)
@@ -49,30 +53,20 @@ while True:
             core.movement.stop()
             continue
 
-    if not isForward and not isBackward and tiltDirection == "neutral":
-        core.movement.stop()
-        continue
-
     if isForward:
         if tiltDirection == "left":
             core.movement.forwardLeft(forwardPercent, tiltPercent)
-            continue
         elif tiltDirection == "right":
             core.movement.forwardRight(forwardPercent, tiltPercent)
-            continue
         else:
             core.movement.forward(forwardPercent)
-            continue
     elif isBackward:
         if tiltDirection == "left":
             core.movement.backwardLeft(backwardPercent, tiltPercent)
-            continue
         elif tiltDirection == "right":
             core.movement.backwardRight(backwardPercent, tiltPercent)
-            continue
         else:
             core.movement.backward(backwardPercent)
-            continue
 
-    wait(100)
+    wait(50)
     pass
