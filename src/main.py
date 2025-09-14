@@ -1,10 +1,12 @@
 from pybricks.hubs import PrimeHub
+from pybricks.iodevices import XboxController
 from pybricks.parameters import Direction, Port
 from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
 from pybricks.tools import wait
 
 
 from core.index import Core
+from core.controller import Controller
 
 
 # Set up all devices.
@@ -15,6 +17,7 @@ backFeel = ForceSensor(Port.A)
 colorSensor = ColorSensor(Port.B)
 rightMotor = Motor(Port.E, Direction.CLOCKWISE)
 leftMotor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
+XBoxController = XboxController()
 
 
 core = Core(
@@ -27,8 +30,10 @@ core = Core(
     leftMotor,
 )
 
+controller = Controller(XBoxController)
+
 while True:
 
-    core.movement.backwardLeft(10, 50)
+    wait(2000)
 
     pass
