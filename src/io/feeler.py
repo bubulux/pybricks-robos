@@ -2,6 +2,8 @@ from typing import Callable, Literal
 
 from pybricks.pupdevices import ForceSensor
 
+from io.utils import forceToPercent
+
 
 class Feeler:
     def __init__(
@@ -42,15 +44,6 @@ class Feeler:
         self._propagateHit(self._sensorRight, "medium", "light")
         self._propagateHit(self._sensorBack, "heavy", "medium")
 
-    def fillDebounce(self):
-        self._debouncer = self._debouncer + 50
-
-    def resetDebounce(self):
-        self._debouncer = 0
-
     def listenForHits(self):
-        if self._debouncer == 250:
-            self._applyHits()
-            self.resetDebounce()
-        else:
-            self.fillDebounce()
+
+        pass
