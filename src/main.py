@@ -6,7 +6,7 @@ from pybricks.tools import wait
 
 
 from core.index import Core
-from core.controller import Controller
+from io.controller import Controller
 
 
 # Set up all devices.
