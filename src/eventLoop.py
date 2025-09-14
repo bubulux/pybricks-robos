@@ -2,7 +2,9 @@ from core.index import Core
 from io.controller import Controller
 
 
-def eventLoop(core: Core, controller: Controller):
+def eventLoop(
+    core: Core,
+):
 
     # isForward, forwardPercent = controller.forward()
     # isBackward, backwardPercent = controller.backward()
@@ -17,6 +19,5 @@ def eventLoop(core: Core, controller: Controller):
     #     tiltPercent,
     # )
 
-    # core.feeler.listenForHits()
+    core.feeler.listenForHits()
     core.health.check()
-    print("test")

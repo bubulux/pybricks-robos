@@ -19,7 +19,7 @@ backFeel = ForceSensor(Port.A)
 colorSensor = ColorSensor(Port.B)
 rightMotor = Motor(Port.E, Direction.CLOCKWISE)
 leftMotor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
-XBoxController = XboxController()
+# XBoxController = XboxController()
 
 
 core = Core(
@@ -32,9 +32,8 @@ core = Core(
     leftMotor,
 )
 
-controller = Controller(XBoxController)
+# controller = Controller(XBoxController)
 
 while True:
-    eventLoop(core, controller)
-    print("tests")
+    eventLoop(core)
     wait(50)

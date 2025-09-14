@@ -16,15 +16,17 @@ class Feeler:
         self._sensorBack = sensorBack
         self._harm = harm
 
+        self._debouncer = 0
+
     def _damage(self, type: Literal["light", "medium", "heavy"]):
         if type == "light":
-            self._harm(5)
+            self._harm(1)
         elif type == "medium":
-            self._harm(10)
+            self._harm(3)
         elif type == "heavy":
-            self._harm(20)
+            self._harm(6)
 
-    def propagateHit(
+    def _propagateHit(
         self,
         sensor: ForceSensor,
         forPressed: Literal["light", "medium", "heavy"],
@@ -35,7 +37,20 @@ class Feeler:
         if sensor.touched():
             self._damage(forTouched)
 
+    def _applyHits(self):
+        self._propagateHit(self._sensorLeft, "medium", "light")
+        self._propagateHit(self._sensorRight, "medium", "light")
+        self._propagateHit(self._sensorBack, "heavy", "medium")
+
+    def fillDebounce(self):
+        self._debouncer = self._debouncer + 50
+
+    def resetDebounce(self):
+        self._debouncer = 0
+
     def listenForHits(self):
-        self.propagateHit(self._sensorLeft, "medium", "light")
-        self.propagateHit(self._sensorRight, "medium", "light")
-        self.propagateHit(self._sensorBack, "heavy", "medium")
+        if self._debouncer == 250:
+            self._applyHits()
+            self.resetDebounce()
+        else:
+            self.fillDebounce()
