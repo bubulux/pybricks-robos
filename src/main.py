@@ -8,6 +8,8 @@ from pybricks.tools import wait
 from core.index import Core
 from io.controller import Controller
 
+from eventLoop import eventLoop
+
 
 # Set up all devices.
 hub = PrimeHub()
@@ -33,19 +35,5 @@ core = Core(
 controller = Controller(XBoxController)
 
 while True:
-
-    isForward, forwardPercent = controller.forward()
-    isBackward, backwardPercent = controller.backward()
-    tiltDirection, tiltPercent = controller.tilt()
-
-    core.movement.control.controlledBehavior(
-        isForward,
-        forwardPercent,
-        isBackward,
-        backwardPercent,
-        tiltDirection,
-        tiltPercent,
-    )
-
+    eventLoop(core, controller)
     wait(50)
-    pass
