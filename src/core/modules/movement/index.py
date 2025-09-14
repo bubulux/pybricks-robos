@@ -1,56 +1,7 @@
-from typing import Literal
 from pybricks.pupdevices import Motor
 
 from core.modules.movement.actions import Actions
-
-
-class Control:
-
-    def __init__(
-        self,
-        actions: Actions,
-    ):
-
-        self._actions = actions
-
-    def controlledBehavior(
-        self,
-        isForward: bool,
-        forwardPercent: int,
-        isBackward: bool,
-        backwardPercent: int,
-        tiltDirection: Literal["left", "right", "neutral"],
-        tiltPercent: int,
-    ):
-        if not isForward and not isBackward and tiltDirection == "neutral":
-            self._actions.stop()
-            return
-
-        if isForward and isBackward:
-            if tiltDirection == "left":
-                self._actions.turnLeft(tiltPercent)
-                return
-            elif tiltDirection == "right":
-                self._actions.turnRight(tiltPercent)
-                return
-            else:
-                self._actions.stop()
-                return
-
-        if isForward:
-            if tiltDirection == "left":
-                self._actions.forwardLeft(forwardPercent, tiltPercent)
-            elif tiltDirection == "right":
-                self._actions.forwardRight(forwardPercent, tiltPercent)
-            else:
-                self._actions.forward(forwardPercent)
-        elif isBackward:
-            if tiltDirection == "left":
-                self._actions.backwardLeft(backwardPercent, tiltPercent)
-            elif tiltDirection == "right":
-                self._actions.backwardRight(backwardPercent, tiltPercent)
-            else:
-                self._actions.backward(backwardPercent)
+from core.modules.movement.control import Control
 
 
 class Movement:
@@ -65,5 +16,13 @@ class Movement:
 
         self._actions = Actions(self._rightMotor, self._leftMotor)
         self.control = Control(
-            self._actions,
+            self._actions.stop,
+            self._actions.forward,
+            self._actions.backward,
+            self._actions.turnLeft,
+            self._actions.turnRight,
+            self._actions.forwardLeft,
+            self._actions.forwardRight,
+            self._actions.backwardLeft,
+            self._actions.backwardRight,
         )
