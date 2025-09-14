@@ -19,6 +19,25 @@ class Movement:
         else:
             motor.run(-convertedSpeed)
 
+    def _tiltedDirection(
+        self,
+        dirPercent: int,
+        tiltPercent: int,
+        direction: Literal["forward", "backward"],
+        tilt: Literal["left", "right"],
+    ):
+        # Determine motor speeds based on tilt direction
+        if tilt == "left":
+            leftPercent = min(dirPercent, tiltPercent)
+            rightPercent = max(dirPercent, tiltPercent)
+        else:  # tilt == "right"
+            leftPercent = max(dirPercent, tiltPercent)
+            rightPercent = min(dirPercent, tiltPercent)
+
+        # Apply the speeds to the motors
+        self._controledMotor(leftPercent, direction, self._leftMotor)
+        self._controledMotor(rightPercent, direction, self._rightMotor)
+
     def stop(self):
         self._rightMotor.stop()
         self._leftMotor.stop()
@@ -40,12 +59,13 @@ class Movement:
         self._controledMotor(percent, "forward", self._leftMotor)
 
     def forwardLeft(self, dirPercent: int, tiltPercent: int):
-        leftPercent = dirPercent
-        rightPercent = tiltPercent
+        self._tiltedDirection(dirPercent, tiltPercent, "forward", "left")
 
-        if dirPercent > tiltPercent:
-            leftPercent = tiltPercent
-            rightPercent = dirPercent
+    def forwardRight(self, dirPercent: int, tiltPercent: int):
+        self._tiltedDirection(dirPercent, tiltPercent, "forward", "right")
 
-        self._controledMotor(leftPercent, "forward", self._leftMotor)
-        self._controledMotor(rightPercent, "forward", self._rightMotor)
+    def backwardLeft(self, dirPercent: int, tiltPercent: int):
+        self._tiltedDirection(dirPercent, tiltPercent, "backward", "left")
+
+    def backwardRight(self, dirPercent: int, tiltPercent: int):
+        self._tiltedDirection(dirPercent, tiltPercent, "backward", "right")

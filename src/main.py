@@ -29,6 +29,6 @@ core = Core(
 
 while True:
 
-    core.movement.forwardLeft(20, 50)
+    core.movement.backwardLeft(10, 50)
 
     pass
