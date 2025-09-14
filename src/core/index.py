@@ -5,6 +5,8 @@ from core.modules.display import Display
 from core.modules.movement.index import Movement
 from core.modules.health import Health
 
+from io.feeler import Feeler
+
 
 class Core:
 
@@ -29,3 +31,9 @@ class Core:
         self.health = Health()
         self.movement = Movement(self.rightMotor, self.leftMotor)
         self.display = Display()
+        self.feeler = Feeler(
+            self.leftFeel,
+            self.rightFeel,
+            self.backFeel,
+            self.health.harm,
+        )

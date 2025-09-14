@@ -36,4 +36,5 @@ controller = Controller(XBoxController)
 
 while True:
     eventLoop(core, controller)
+    print("tests")
     wait(50)

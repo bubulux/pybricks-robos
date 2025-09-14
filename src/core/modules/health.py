@@ -1,5 +1,5 @@
 class Health:
-    healthpoints = 1000
+    healthpoints = 100
 
     def check(self):
         if self.healthpoints <= 0:
