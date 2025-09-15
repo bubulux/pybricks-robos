@@ -2,13 +2,18 @@ import { useState, useEffect, useCallback } from "react";
 import { z } from "zod";
 
 // Zod schema for robot sensor data validation
-const SensorValueSchema = z.union([z.literal("NONE"), z.number()]);
+
+const Literals = z.union([
+  z.literal("NONE"),
+  z.literal("INIT"),
+  z.literal("START"),
+]);
+
+const SensorValueSchema = z.union([Literals, z.number()]);
 
 const RobotSensorDataSchema = z.object({
   HEALTH: z.array(SensorValueSchema),
-  LIGHT: z.array(
-    z.union([z.literal("NONE"), z.literal("RED"), z.literal("GREEN")]),
-  ),
+  LIGHT: z.array(z.union([Literals, z.literal("RED"), z.literal("GREEN")])),
   PRESSURE_LEFT: z.array(SensorValueSchema),
   PRESSURE_RIGHT: z.array(SensorValueSchema),
   PRESSURE_BACK: z.array(SensorValueSchema),
