@@ -2,7 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
-import { readFileSync, watch, type FSWatcher } from "fs";
+import { readFileSync } from "fs";
+import * as chokidar from "chokidar";
 
 function createWindow(): void {
   // Create the browser window.
@@ -108,40 +109,118 @@ app.whenReady().then(() => {
   });
 
   // Watch for file changes
-  let fileWatcher: FSWatcher | null = null;
+  let fileWatcher: chokidar.FSWatcher | null = null;
+  let pollingInterval: NodeJS.Timeout | null = null;
+  let lastFileContent = "";
+  let debounceTimer: NodeJS.Timeout | null = null;
 
   ipcMain.handle("start-watching-csv", () => {
-    if (fileWatcher) {
+    if (fileWatcher || pollingInterval) {
       return; // Already watching
     }
 
+    // Read initial content
     try {
-      fileWatcher = watch(csvFilePath, (eventType) => {
-        if (eventType === "change") {
-          try {
-            const content = readFileSync(csvFilePath, "utf-8");
-            const parsedData = parseCSVToHistoryMap(content);
-            // Send updated data to all renderer processes
-            BrowserWindow.getAllWindows().forEach((window) => {
-              window.webContents.send("csv-data-changed", parsedData);
-            });
-          } catch (error) {
-            console.error("Error reading updated CSV file:", error);
-          }
-        }
+      lastFileContent = readFileSync(csvFilePath, "utf-8");
+    } catch (error) {
+      console.error("Error reading initial CSV content:", error);
+      lastFileContent = "";
+    }
+
+    try {
+      // Use chokidar for file system events (fast detection)
+      fileWatcher = chokidar.watch(csvFilePath, {
+        persistent: true,
+        usePolling: false,
+        ignoreInitial: true,
+        awaitWriteFinish: {
+          stabilityThreshold: 50,
+          pollInterval: 25,
+        },
       });
-      console.log("Started watching CSV file:", csvFilePath);
+
+      fileWatcher.on("change", () => {
+        console.log("Chokidar detected file change");
+        handleFileChange();
+      });
+
+      fileWatcher.on("error", (error) => {
+        console.error("File watcher error:", error);
+      });
+
+      // Also use polling as a fallback for Python script locks (reliable detection)
+      pollingInterval = setInterval(() => {
+        try {
+          const currentContent = readFileSync(csvFilePath, "utf-8");
+          if (currentContent !== lastFileContent) {
+            console.log("Polling detected file change");
+            lastFileContent = currentContent;
+            handleFileChange();
+          }
+        } catch {
+          // File might be locked, that's ok, we'll try again
+        }
+      }, 100); // Poll every 100ms
+
+      console.log(
+        "Started watching CSV file with chokidar + polling:",
+        csvFilePath,
+      );
     } catch (error) {
       console.error("Error starting file watcher:", error);
     }
   });
 
+  // Centralized file change handler
+  function handleFileChange(): void {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+
+    debounceTimer = setTimeout(() => {
+      try {
+        const content = readFileSync(csvFilePath, "utf-8");
+        lastFileContent = content; // Update our cache
+        const parsedData = parseCSVToHistoryMap(content);
+        console.log("CSV file changed, sending update to renderer");
+
+        // Send updated data to all renderer processes
+        BrowserWindow.getAllWindows().forEach((window) => {
+          window.webContents.send("csv-data-changed", parsedData);
+        });
+      } catch (error) {
+        console.error("Error reading updated CSV file:", error);
+        // Retry after a short delay if the file is locked
+        setTimeout(() => {
+          try {
+            const content = readFileSync(csvFilePath, "utf-8");
+            lastFileContent = content;
+            const parsedData = parseCSVToHistoryMap(content);
+            BrowserWindow.getAllWindows().forEach((window) => {
+              window.webContents.send("csv-data-changed", parsedData);
+            });
+          } catch (retryError) {
+            console.error("Retry failed:", retryError);
+          }
+        }, 150);
+      }
+    }, 50); // 50ms debounce delay
+  }
+
   ipcMain.handle("stop-watching-csv", () => {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+      debounceTimer = null;
+    }
+    if (pollingInterval) {
+      clearInterval(pollingInterval);
+      pollingInterval = null;
+    }
     if (fileWatcher) {
       fileWatcher.close();
       fileWatcher = null;
-      console.log("Stopped watching CSV file");
     }
+    console.log("Stopped watching CSV file");
   });
 
   createWindow();
