@@ -12,7 +12,7 @@ def capture_robot_logs():
 
     # Generate timestamp for log filename
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_filename = f"logs/robot_log_{timestamp}.txt"
+    log_filename = f"ui/logs/robot_log_{timestamp}.txt"
 
     print("=" * 50)
     print("🎯 Listening to logs...")

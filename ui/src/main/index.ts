@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import { readFileSync, watch, type FSWatcher } from "fs";
 
 function createWindow(): void {
   // Create the browser window.
@@ -51,6 +52,61 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
+
+  // File watching setup
+  // The log file is now in ui/logs/ directory
+  const logFilePath = join(
+    __dirname,
+    "../../logs/robot_log_20250914_144928.txt",
+  );
+
+  console.log("Looking for log file at:", logFilePath);
+
+  // Handle request for initial file content
+  ipcMain.handle("get-log-content", () => {
+    try {
+      return readFileSync(logFilePath, "utf-8");
+    } catch (error) {
+      console.error("Error reading log file:", error);
+      return "Error reading log file";
+    }
+  });
+
+  // Watch for file changes
+  let fileWatcher: FSWatcher | null = null;
+
+  ipcMain.handle("start-watching-log", () => {
+    if (fileWatcher) {
+      return; // Already watching
+    }
+
+    try {
+      fileWatcher = watch(logFilePath, (eventType) => {
+        if (eventType === "change") {
+          try {
+            const content = readFileSync(logFilePath, "utf-8");
+            // Send updated content to all renderer processes
+            BrowserWindow.getAllWindows().forEach((window) => {
+              window.webContents.send("log-file-changed", content);
+            });
+          } catch (error) {
+            console.error("Error reading updated log file:", error);
+          }
+        }
+      });
+      console.log("Started watching log file:", logFilePath);
+    } catch (error) {
+      console.error("Error starting file watcher:", error);
+    }
+  });
+
+  ipcMain.handle("stop-watching-log", () => {
+    if (fileWatcher) {
+      fileWatcher.close();
+      fileWatcher = null;
+      console.log("Stopped watching log file");
+    }
+  });
 
   createWindow();
 
