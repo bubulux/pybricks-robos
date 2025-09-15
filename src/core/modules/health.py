@@ -1,16 +1,21 @@
+from utils.streamer import streamHealth
+
+
 class Health:
     healthpoints = 100
 
     def check(self):
         if self.healthpoints <= 0:
-            print("ROBOT: NO_POINTS")
+            streamHealth(0)
             return False
         else:
-            print(f"{self.healthpoints}, NONE, NONE, NONE, NONE")
+            streamHealth(self.healthpoints)
             return True
 
     def harm(self, damage: int):
         self.healthpoints -= damage
+        streamHealth(self.healthpoints)
 
     def heal(self, points: int):
         self.healthpoints += points
+        streamHealth(self.healthpoints)
