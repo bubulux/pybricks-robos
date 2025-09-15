@@ -4,6 +4,8 @@ from pybricks.pupdevices import ForceSensor
 
 from io.utils import forceToPercent, Mutex
 
+from utils.streamer import streamPressureBack, streamPressureLeft, streamPressureRight
+
 
 class Feeler:
     def __init__(
@@ -23,34 +25,44 @@ class Feeler:
         self._lockRight = Mutex()
         self._lockBack = Mutex()
 
-    def _damage(self, type: Literal["light", "medium", "heavy"]):
+    def _damage(
+        self,
+        type: Literal["light", "medium", "heavy"],
+        dataStreamer: Callable[[int], None],
+    ):
         if type == "light":
             self._harm(5)
+            dataStreamer(5)
         elif type == "medium":
             self._harm(10)
+            dataStreamer(10)
         elif type == "heavy":
             self._harm(20)
+            dataStreamer(20)
 
-    def _proccessSensor(self, sensor: ForceSensor, lock: Mutex):
+    def _proccessSensor(
+        self, sensor: ForceSensor, lock: Mutex, dataStreamer: Callable[[int], None]
+    ):
         percent = forceToPercent(sensor.force())
 
         # If force is 0 and lock is active, release it
         if percent == 0 and lock.isLocked():
+            dataStreamer(0)
             lock.unlock()
 
         # Only process damage if lock is not active
         if not lock.isLocked():
             if 1 <= percent <= 30:
-                self._damage("light")
+                self._damage("light", dataStreamer)
                 lock.lock()
             elif 31 <= percent <= 60:
-                self._damage("medium")
+                self._damage("medium", dataStreamer)
                 lock.lock()
             elif percent >= 61:
-                self._damage("heavy")
+                self._damage("heavy", dataStreamer)
                 lock.lock()
 
     def listenForHits(self):
-        self._proccessSensor(self._sensorLeft, self._lockLeft)
-        self._proccessSensor(self._sensorRight, self._lockRight)
-        self._proccessSensor(self._sensorBack, self._lockBack)
+        self._proccessSensor(self._sensorLeft, self._lockLeft, streamPressureLeft)
+        self._proccessSensor(self._sensorRight, self._lockRight, streamPressureRight)
+        self._proccessSensor(self._sensorBack, self._lockBack, streamPressureBack)
