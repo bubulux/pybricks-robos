@@ -1,44 +1,7 @@
-import { useState, useEffect } from "react";
-
-interface SensorData {
-  [key: string]: (string | number)[];
-}
+import { useRobotDataStream } from "./hooks/useRobotDataStream";
 
 function App(): React.JSX.Element {
-  const [csvData, setCsvData] = useState<SensorData>({});
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Load initial CSV data
-    window.api
-      .getCsvData()
-      .then((data) => {
-        setCsvData(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Failed to load CSV data:", error);
-        setIsLoading(false);
-      });
-
-    // Start watching for file changes
-    window.api.startWatchingCsv().catch((error) => {
-      console.error("Failed to start watching CSV file:", error);
-    });
-
-    // Subscribe to file changes
-    const unsubscribe = window.api.onCsvDataChanged((data) => {
-      setCsvData(data);
-    });
-
-    // Cleanup on unmount
-    return () => {
-      unsubscribe();
-      window.api.stopWatchingCsv().catch((error) => {
-        console.error("Failed to stop watching CSV file:", error);
-      });
-    };
-  }, []);
+  const { data: csvData, isLoading, error, isConnected } = useRobotDataStream();
 
   if (isLoading) {
     return (
@@ -49,24 +12,48 @@ function App(): React.JSX.Element {
     );
   }
 
+  if (error) {
+    return (
+      <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+        <h1>Robot Sensor Monitor</h1>
+        <div
+          style={{
+            color: "red",
+            padding: "10px",
+            backgroundColor: "#ffe6e6",
+            borderRadius: "5px",
+          }}
+        >
+          <strong>Error:</strong> {error}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
       <h1>Robot Sensor Monitor</h1>
 
-      <div style={{ marginBottom: "20px" }}>
-        <h2>Current Sensor History</h2>
-        <pre
+      {/* Connection Status */}
+      <div
+        style={{
+          marginBottom: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        <div
           style={{
-            backgroundColor: "#f5f5f5",
-            padding: "15px",
-            borderRadius: "5px",
-            border: "1px solid #ddd",
-            fontSize: "14px",
-            overflow: "auto",
+            width: "10px",
+            height: "10px",
+            borderRadius: "50%",
+            backgroundColor: isConnected ? "#4CAF50" : "#f44336",
           }}
-        >
-          {JSON.stringify(csvData, null, 2)}
-        </pre>
+        />
+        <span style={{ fontSize: "14px", color: "#666" }}>
+          {isConnected ? "Connected" : "Disconnected"}
+        </span>
       </div>
 
       <div style={{ display: "grid", gap: "15px" }}>
