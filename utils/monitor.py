@@ -6,19 +6,25 @@ from typing import TextIO
 
 
 def capture_robot_logs():
-    # Create logs directory if it doesn't exist
-    if not os.path.exists("logs"):
-        os.makedirs("logs")
+    # Create ui/stream directory if it doesn't exist
+    stream_dir = "ui/stream"
+    if not os.path.exists(stream_dir):
+        os.makedirs(stream_dir)
 
-    # Generate timestamp for log filename
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_filename = f"ui/logs/robot_log_{timestamp}.txt"
+    # CSV file for real-time data streaming
+    csv_filename = "ui/stream/info.csv"
 
     print("=" * 50)
-    print("🎯 Listening to logs...")
-    print(f"📁 Logging to: {log_filename}")
+    print("🎯 Listening to robot logs...")
+    print(f"📁 Streaming CSV to: {csv_filename}")
     print("🤖 Starting robot connection...")
     print("=" * 50)
+
+    # Initialize CSV file with header and INIT row
+    with open(csv_filename, "w", encoding="utf-8") as csv_file:
+        csv_file.write("HEALTH,LIGHT, PRESSURE_LEFT, PRESSURE_RIGHT, PRESSURE_BACK\n")
+        csv_file.write("INIT, INIT, INIT, INIT, INIT\n")
+        csv_file.flush()
 
     process = None
     try:
@@ -46,23 +52,15 @@ def capture_robot_logs():
             env={**os.environ, "PYTHONUNBUFFERED": "1"},
         )
 
-        with open(log_filename, "w", encoding="utf-8") as log_file:
-            # Write header to log file
-            log_file.write(f"Robot Log Session Started: {datetime.now()}\n")
-            log_file.write("=" * 50 + "\n")
-            log_file.flush()
-
+        with open(csv_filename, "a", encoding="utf-8") as csv_file:
             # Real-time monitoring using character-by-character reading
             output_buffer = ""
 
             while True:
                 # Check if process is still running
                 if process.poll() is not None:
-                    # Process has ended, read any remaining output
-                    remaining = process.stdout.read()  # type: ignore
-                    if remaining:
-                        output_buffer += remaining
-                        _process_buffer_lines(output_buffer, log_file)
+                    # Process has ended, no need to process remaining output
+                    # since we've been processing line by line in real-time
                     break
 
                 # Read one character at a time for immediate processing
@@ -77,8 +75,8 @@ def capture_robot_logs():
                             # Process all complete lines
                             # (all but the last, which might be incomplete)
                             for line in lines[:-1]:
-                                if line:  # Skip empty lines
-                                    _write_log_entry(line, log_file)
+                                if line.strip():  # Skip empty lines
+                                    _write_csv_entry(line.strip(), csv_file)
 
                             # Keep the last (potentially incomplete) line in buffer
                             output_buffer = lines[-1]
@@ -102,28 +100,58 @@ def capture_robot_logs():
     except Exception as e:
         print(f"\n❌ Error occurred: {e}")
     finally:
-        print(f"📝 Log saved to: {log_filename}")
+        print(f"📝 CSV data saved to: {csv_filename}")
 
 
-def _process_buffer_lines(buffer: str, log_file: TextIO) -> None:
-    """Process any remaining lines in the buffer"""
-    lines = buffer.split("\n")
-    for line in lines:
-        if line.strip():  # Skip empty lines
-            _write_log_entry(line, log_file)
+def _write_csv_entry(line: str, csv_file: TextIO) -> None:
+    """Write pure CSV data to file and display to console"""
+    # Filter out non-CSV lines (connection progress, search messages, etc.)
+    if _is_valid_csv_line(line):
+        # Write pure CSV line to file (no timestamp, no formatting)
+        csv_file.write(f"{line}\n")
+        csv_file.flush()
 
-
-def _write_log_entry(line: str, log_file: TextIO) -> None:
-    """Write a log entry with timestamp to both file and console"""
+    # Display to console with timestamp for monitoring (all lines)
     timestamp_str = datetime.now().strftime("%H:%M:%S.%f")[:-3]
-    log_entry = f"[{timestamp_str}] {line.rstrip()}\n"
+    print(f"\033[36m[{timestamp_str}]\033[0m {line}", flush=True)
 
-    # Write to file immediately
-    log_file.write(log_entry)
-    log_file.flush()
 
-    # Print to console (with color for timestamp) - ensure flushed
-    print(f"\033[36m[{timestamp_str}]\033[0m {line.rstrip()}", flush=True)
+def _is_valid_csv_line(line: str) -> bool:
+    """Check if a line is valid CSV data that should be written to file"""
+    line = line.strip()
+
+    # Skip empty lines
+    if not line:
+        return False
+
+    # Skip connection/search messages
+    if "Searching for" in line:
+        return False
+
+    # Skip progress bars (contain % and | characters)
+    if "%" in line and "|" in line:
+        return False
+
+    # Skip other pybricksdev messages
+    if "The program was stopped" in line:
+        return False
+
+    # Skip lines that don't contain expected sensor indicators or CSV format
+    # Allow lines with sensor indicators like "HEALTH_INDICATOR: 100"
+    # or proper CSV format with commas
+    if (
+        "HEALTH" in line
+        or "LIGHT" in line
+        or "PRESSURE" in line
+        or "," in line
+        or "NONE" in line
+        or "RED" in line
+        or "GREEN" in line
+    ):
+        return True
+
+    # Skip everything else
+    return False
 
 
 if __name__ == "__main__":

@@ -6,7 +6,7 @@ class Health:
             print("ROBOT: NO_POINTS")
             return False
         else:
-            print(f"HEALTH_INDICATOR: {self.healthpoints}")
+            print(f"{self.healthpoints}, NONE, NONE, NONE, NONE")
             return True
 
     def harm(self, damage: int):
