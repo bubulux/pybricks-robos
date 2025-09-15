@@ -3,19 +3,21 @@ import { electronAPI } from "@electron-toolkit/preload";
 
 // Custom APIs for renderer
 const api = {
-  // Log file watching
-  getLogContent: () => ipcRenderer.invoke("get-log-content"),
-  startWatchingLog: () => ipcRenderer.invoke("start-watching-log"),
-  stopWatchingLog: () => ipcRenderer.invoke("stop-watching-log"),
-  onLogFileChanged: (callback: (content: string) => void) => {
+  // CSV file watching
+  getCsvData: () => ipcRenderer.invoke("get-csv-data"),
+  startWatchingCsv: () => ipcRenderer.invoke("start-watching-csv"),
+  stopWatchingCsv: () => ipcRenderer.invoke("stop-watching-csv"),
+  onCsvDataChanged: (
+    callback: (data: Record<string, (string | number)[]>) => void,
+  ) => {
     const unsubscribe = (
       _event: Electron.IpcRendererEvent,
-      content: string,
-    ): void => callback(content);
-    ipcRenderer.on("log-file-changed", unsubscribe);
+      data: Record<string, (string | number)[]>,
+    ): void => callback(data);
+    ipcRenderer.on("csv-data-changed", unsubscribe);
 
     // Return cleanup function
-    return () => ipcRenderer.removeListener("log-file-changed", unsubscribe);
+    return () => ipcRenderer.removeListener("csv-data-changed", unsubscribe);
   },
 };
 

@@ -1,15 +1,17 @@
 import { ElectronAPI } from "@electron-toolkit/preload";
 
-interface LogAPI {
-  getLogContent: () => Promise<string>;
-  startWatchingLog: () => Promise<void>;
-  stopWatchingLog: () => Promise<void>;
-  onLogFileChanged: (callback: (content: string) => void) => () => void;
+interface CsvAPI {
+  getCsvData: () => Promise<Record<string, (string | number)[]>>;
+  startWatchingCsv: () => Promise<void>;
+  stopWatchingCsv: () => Promise<void>;
+  onCsvDataChanged: (
+    callback: (data: Record<string, (string | number)[]>) => void,
+  ) => () => void;
 }
 
 declare global {
   interface Window {
     electron: ElectronAPI;
-    api: LogAPI;
+    api: CsvAPI;
   }
 }

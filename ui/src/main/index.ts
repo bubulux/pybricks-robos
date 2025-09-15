@@ -54,57 +54,93 @@ app.whenReady().then(() => {
   ipcMain.on("ping", () => console.log("pong"));
 
   // File watching setup
-  // The log file is now in ui/logs/ directory
-  const logFilePath = join(
-    __dirname,
-    "../../logs/robot_log_20250914_144928.txt",
-  );
+  // Watch the CSV file for sensor data
+  const csvFilePath = join(__dirname, "../../stream/info.csv");
 
-  console.log("Looking for log file at:", logFilePath);
+  console.log("Looking for CSV file at:", csvFilePath);
 
-  // Handle request for initial file content
-  ipcMain.handle("get-log-content", () => {
+  // Function to parse CSV into history map
+  function parseCSVToHistoryMap(
+    csvContent: string,
+  ): Record<string, (string | number)[]> {
+    const lines = csvContent.trim().split("\n");
+    if (lines.length < 2) {
+      return {};
+    }
+
+    // Get headers from first line
+    const headers = lines[0].split(",").map((h) => h.trim());
+    const result: Record<string, (string | number)[]> = {};
+
+    // Initialize arrays for each header
+    headers.forEach((header) => {
+      result[header] = [];
+    });
+
+    // Process data rows (skip header)
+    for (let i = 1; i < lines.length; i++) {
+      const values = lines[i].split(",").map((v) => v.trim());
+      headers.forEach((header, index) => {
+        const value = values[index] || "NONE";
+        // Convert to number if it's numeric, otherwise keep as string
+        const parsedValue =
+          value === "NONE"
+            ? "NONE"
+            : !isNaN(Number(value))
+              ? Number(value)
+              : value;
+        result[header].push(parsedValue);
+      });
+    }
+
+    return result;
+  }
+
+  // Handle request for initial CSV data
+  ipcMain.handle("get-csv-data", () => {
     try {
-      return readFileSync(logFilePath, "utf-8");
+      const content = readFileSync(csvFilePath, "utf-8");
+      return parseCSVToHistoryMap(content);
     } catch (error) {
-      console.error("Error reading log file:", error);
-      return "Error reading log file";
+      console.error("Error reading CSV file:", error);
+      return {};
     }
   });
 
   // Watch for file changes
   let fileWatcher: FSWatcher | null = null;
 
-  ipcMain.handle("start-watching-log", () => {
+  ipcMain.handle("start-watching-csv", () => {
     if (fileWatcher) {
       return; // Already watching
     }
 
     try {
-      fileWatcher = watch(logFilePath, (eventType) => {
+      fileWatcher = watch(csvFilePath, (eventType) => {
         if (eventType === "change") {
           try {
-            const content = readFileSync(logFilePath, "utf-8");
-            // Send updated content to all renderer processes
+            const content = readFileSync(csvFilePath, "utf-8");
+            const parsedData = parseCSVToHistoryMap(content);
+            // Send updated data to all renderer processes
             BrowserWindow.getAllWindows().forEach((window) => {
-              window.webContents.send("log-file-changed", content);
+              window.webContents.send("csv-data-changed", parsedData);
             });
           } catch (error) {
-            console.error("Error reading updated log file:", error);
+            console.error("Error reading updated CSV file:", error);
           }
         }
       });
-      console.log("Started watching log file:", logFilePath);
+      console.log("Started watching CSV file:", csvFilePath);
     } catch (error) {
       console.error("Error starting file watcher:", error);
     }
   });
 
-  ipcMain.handle("stop-watching-log", () => {
+  ipcMain.handle("stop-watching-csv", () => {
     if (fileWatcher) {
       fileWatcher.close();
       fileWatcher = null;
-      console.log("Stopped watching log file");
+      console.log("Stopped watching CSV file");
     }
   });
 
