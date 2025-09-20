@@ -6,6 +6,7 @@ from core.modules.movement.index import Movement
 from core.modules.health import Health
 
 from io.feeler import Feeler
+from io.color import Color
 
 
 class Core:
@@ -37,3 +38,4 @@ class Core:
             self.backFeel,
             self.health.harm,
         )
+        self.color = Color(self.colorSensor, self.health.harm, self.health.heal)

@@ -19,5 +19,6 @@ def eventLoop(
     #     tiltPercent,
     # )
 
-    core.feeler.listenForHits()
+    # core.feeler.listenForHits()
     # core.health.check()
+    pass
