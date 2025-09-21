@@ -5,13 +5,20 @@ from typing import Union, Literal
 class SensorStreamer:
     @staticmethod
     def printSensors(
-        health: Union[int, Literal["NONE", "START"]] = "NONE",
+        health: Union[int, Literal["NONE", "START", "END"]] = "NONE",
         lightState: Literal[
-            "NONE", "START", "FORBIDDEN", "HEALING", "PROTECTED", "DAMAGING", "NEUTRAL"
+            "NONE",
+            "START",
+            "FORBIDDEN",
+            "HEALING",
+            "PROTECTED",
+            "DAMAGING",
+            "NEUTRAL",
+            "END",
         ] = "NONE",
-        pressureLeft: Union[int, Literal["NONE", "START"]] = "NONE",
-        pressureRight: Union[int, Literal["NONE", "START"]] = "NONE",
-        pressureBack: Union[int, Literal["NONE", "START"]] = "NONE",
+        pressureLeft: Union[int, Literal["NONE", "START", "END"]] = "NONE",
+        pressureRight: Union[int, Literal["NONE", "START", "END"]] = "NONE",
+        pressureBack: Union[int, Literal["NONE", "START", "END"]] = "NONE",
     ) -> None:
         """
         Print sensor data in CSV format for streaming to UI
@@ -82,4 +89,15 @@ def streamStart() -> None:
         pressureLeft="START",
         pressureRight="START",
         pressureBack="START",
+    )
+
+
+def streamEnd() -> None:
+    """Stream END signal for all columns"""
+    SensorStreamer.printSensors(
+        health="END",
+        lightState="END",
+        pressureLeft="END",
+        pressureRight="END",
+        pressureBack="END",
     )

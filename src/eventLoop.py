@@ -1,6 +1,8 @@
 from core.index import Core
-from io.controller import Controller
 from pybricks.tools import wait
+
+from io.controller import Controller
+from utils.streamer import streamEnd, streamStart
 
 
 class EventLoop:
@@ -29,7 +31,14 @@ class EventLoop:
         return self._core.health.check()
 
     def run(self):
+
+        streamStart()
+
         while True:
-            if not self._roboLoop():
+            isAlive = self._roboLoop()
+
+            if not isAlive:
+                streamEnd()
                 break
+
             wait(self._refreshRate)
