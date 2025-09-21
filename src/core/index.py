@@ -1,3 +1,5 @@
+from typing import Callable
+
 from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
 
@@ -13,6 +15,7 @@ class Core:
 
     def __init__(
         self,
+        eventLoopRefreshRate: int,
         primeHub: PrimeHub,
         rightFeel: ForceSensor,
         leftFeel: ForceSensor,
@@ -38,4 +41,18 @@ class Core:
             self.backFeel,
             self.health.harm,
         )
-        self.color = Color(self.colorSensor, self.health.harm, self.health.heal)
+        self.color = Color(
+            self.colorSensor,
+            self.health.harm,
+            self.health.heal,
+            self._onOneSecondUpdate,
+        )
+        self._eventLoopRefreshRate = eventLoopRefreshRate
+        self._accumulatedTime = 0
+
+    def _onOneSecondUpdate(self, cb: "Callable[[], None]"):
+        if self._accumulatedTime >= 1000:
+            self._accumulatedTime = 0
+            cb()
+        else:
+            self._accumulatedTime += self._eventLoopRefreshRate

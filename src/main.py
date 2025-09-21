@@ -2,7 +2,6 @@ from pybricks.hubs import PrimeHub
 from pybricks.iodevices import XboxController
 from pybricks.parameters import Direction, Port
 from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
-from pybricks.tools import wait
 
 
 from core.index import Core
@@ -21,8 +20,9 @@ rightMotor = Motor(Port.E, Direction.CLOCKWISE)
 leftMotor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
 # XBoxController = XboxController()
 
-
+refreshRate = 50  # milliseconds
 core = Core(
+    refreshRate,
     hub,
     rightFeel,
     leftFeel,
@@ -35,5 +35,4 @@ core = Core(
 # controller = Controller(XBoxController)
 
 while True:
-    eventLoop(core)
-    wait(50)
+    eventLoop(core, refreshRate)

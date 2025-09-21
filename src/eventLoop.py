@@ -1,9 +1,11 @@
 from core.index import Core
 from io.controller import Controller
+from pybricks.tools import wait
 
 
 def eventLoop(
     core: Core,
+    refreshRate: int,
 ):
 
     # isForward, forwardPercent = controller.forward()
@@ -21,4 +23,5 @@ def eventLoop(
 
     # core.feeler.listenForHits()
     # core.health.check()
-    pass
+    core.color.listenForStateUpdates()
+    wait(refreshRate)
