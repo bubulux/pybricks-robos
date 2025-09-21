@@ -7,6 +7,7 @@ const Literals = z.union([
   z.literal("NONE"),
   z.literal("INIT"),
   z.literal("START"),
+  z.literal("END"),
 ]);
 
 const SensorValueSchema = z.union([Literals, z.number()]);
@@ -20,6 +21,7 @@ const RobotSensorDataSchema = z.object({
       z.literal("PROTECTED"),
       z.literal("DAMAGING"),
       z.literal("NEUTRAL"),
+      z.literal("WIN"),
     ]),
   ),
   PRESSURE_LEFT: z.array(SensorValueSchema),

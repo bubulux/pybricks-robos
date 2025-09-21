@@ -24,17 +24,19 @@ class Color:
         # Yellow == PROTECTED
         # Orange == DAMAGING
         # White == NEUTRAL
+        # Blue == WIN
 
         # return "FORBIDDEN"
         # return "HEALING"
         # return "PROTECTED"
-        # return "DAMAGING"
+        # return "DAMAGING"#
+        # return "WIN"
         return "NEUTRAL"
 
     def _execStateEffect(
         self,
         state: Literal[
-            "FORBIDDEN", "HEALING", "PROTECTED", "DAMAGING", "NEUTRAL", "START"
+            "FORBIDDEN", "HEALING", "PROTECTED", "DAMAGING", "NEUTRAL", "START", "WIN"
         ],
     ):
         if state == "FORBIDDEN":
@@ -50,6 +52,8 @@ class Color:
             self._harm(3)
         elif state == "NEUTRAL":
             streamLightState("NEUTRAL")
+        elif state == "WIN":
+            streamLightState("WIN")
 
     def _updateCallBack(self):
         hue, saturation, value = self._colorSensor.hsv()
