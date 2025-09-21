@@ -10,10 +10,18 @@ const Literals = z.union([
 ]);
 
 const SensorValueSchema = z.union([Literals, z.number()]);
-
 const RobotSensorDataSchema = z.object({
   HEALTH: z.array(SensorValueSchema),
-  LIGHT: z.array(z.union([Literals, z.literal("RED"), z.literal("GREEN")])),
+  LIGHT: z.array(
+    z.union([
+      Literals,
+      z.literal("FORBIDDEN"),
+      z.literal("HEALING"),
+      z.literal("PROTECTED"),
+      z.literal("DAMAGING"),
+      z.literal("NEUTRAL"),
+    ]),
+  ),
   PRESSURE_LEFT: z.array(SensorValueSchema),
   PRESSURE_RIGHT: z.array(SensorValueSchema),
   PRESSURE_BACK: z.array(SensorValueSchema),

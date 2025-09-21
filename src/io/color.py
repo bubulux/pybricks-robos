@@ -1,11 +1,7 @@
 from typing import Callable, Literal
 from pybricks.pupdevices import ColorSensor
 
-# Red == FORBIDDEN
-# Green == HEALING
-# Yellow == PROTECTED
-# Orange == DAMAGING
-# White == NEUTRAL
+from utils.streamer import streamLightState
 
 
 class Color:
@@ -22,6 +18,13 @@ class Color:
         self._onOneSecondUpdate = onOneSecondUpdate
 
     def _colorToState(self, hue: int, saturation: int, value: int):
+
+        # Red == FORBIDDEN
+        # Green == HEALING
+        # Yellow == PROTECTED
+        # Orange == DAMAGING
+        # White == NEUTRAL
+
         return "FORBIDDEN"
         # return "HEALING"
         # return "PROTECTED"
@@ -35,17 +38,18 @@ class Color:
         ],
     ):
         if state == "FORBIDDEN":
+            streamLightState("FORBIDDEN")
             self._harm(1)
         elif state == "HEALING":
+            streamLightState("HEALING")
             self._heal(5)
         elif state == "PROTECTED":
-            pass
+            streamLightState("PROTECTED")
         elif state == "DAMAGING":
+            streamLightState("DAMAGING")
             self._harm(3)
         elif state == "NEUTRAL":
-            pass
-        elif state == "START":
-            pass
+            streamLightState("NEUTRAL")
 
     def _updateCallBack(self):
         hue, saturation, value = self._colorSensor.hsv()

@@ -2,19 +2,13 @@
 from typing import Union, Literal
 
 
-class LightColor:
-    """Constants for valid light color values"""
-
-    NONE = "NONE"
-    RED = "RED"
-    GREEN = "GREEN"
-
-
 class SensorStreamer:
     @staticmethod
     def printSensors(
         health: Union[int, Literal["NONE", "START"]] = "NONE",
-        light: Union[LightColor, Literal["NONE", "START"]] = "NONE",
+        lightState: Literal[
+            "NONE", "START", "FORBIDDEN", "HEALING", "PROTECTED", "DAMAGING", "NEUTRAL"
+        ] = "NONE",
         pressureLeft: Union[int, Literal["NONE", "START"]] = "NONE",
         pressureRight: Union[int, Literal["NONE", "START"]] = "NONE",
         pressureBack: Union[int, Literal["NONE", "START"]] = "NONE",
@@ -36,7 +30,7 @@ class SensorStreamer:
         """
         # Convert all values to strings
         healthStr = str(health)
-        lightStr = str(light)
+        lightStr = str(lightState)
         pressure_leftStr = str(pressureLeft)
         pressure_rightStr = str(pressureRight)
         pressure_backStr = str(pressureBack)
@@ -58,9 +52,11 @@ def streamHealth(value: int) -> None:
     SensorStreamer.printSensors(health=value)
 
 
-def streamLight(color: LightColor) -> None:
+def streamLightState(
+    state: Literal["FORBIDDEN", "HEALING", "PROTECTED", "DAMAGING", "NEUTRAL"],
+) -> None:
     """Stream only light data"""
-    SensorStreamer.printSensors(light=color)
+    SensorStreamer.printSensors(lightState=state)
 
 
 def streamPressureLeft(value: int) -> None:
@@ -82,7 +78,7 @@ def streamStart() -> None:
     """Stream START signal for all columns"""
     SensorStreamer.printSensors(
         health="START",
-        light="START",
+        lightState="START",
         pressureLeft="START",
         pressureRight="START",
         pressureBack="START",
