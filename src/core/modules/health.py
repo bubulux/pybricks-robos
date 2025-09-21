@@ -6,10 +6,8 @@ class Health:
 
     def check(self):
         if self.healthpoints <= 0:
-            streamHealth(0)
             return False
         else:
-            streamHealth(self.healthpoints)
             return True
 
     def harm(self, damage: int):

@@ -3,26 +3,33 @@ from io.controller import Controller
 from pybricks.tools import wait
 
 
-def eventLoop(
-    core: Core,
-    controller: Controller,
-    refreshRate: int,
-):
+class EventLoop:
+    def __init__(self, core: Core, controller: Controller, refreshRate: int):
+        self._core = core
+        self._controller = controller
+        self._refreshRate = refreshRate
 
-    isForward, forwardPercent = controller.forward()
-    isBackward, backwardPercent = controller.backward()
-    tiltDirection, tiltPercent = controller.tilt()
+    def _roboLoop(self):
+        isForward, forwardPercent = self._controller.forward()
+        isBackward, backwardPercent = self._controller.backward()
+        tiltDirection, tiltPercent = self._controller.tilt()
 
-    core.movement.control.controlledBehavior(
-        isForward,
-        forwardPercent,
-        isBackward,
-        backwardPercent,
-        tiltDirection,
-        tiltPercent,
-    )
+        self._core.movement.control.controlledBehavior(
+            isForward,
+            forwardPercent,
+            isBackward,
+            backwardPercent,
+            tiltDirection,
+            tiltPercent,
+        )
 
-    core.feeler.listenForHits()
-    core.color.listenForState()
+        self._core.feeler.listenForHits()
+        self._core.color.listenForState()
 
-    wait(refreshRate)
+        return self._core.health.check()
+
+    def run(self):
+        while True:
+            if not self._roboLoop():
+                break
+            wait(self._refreshRate)

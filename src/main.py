@@ -7,7 +7,7 @@ from pybricks.pupdevices import ColorSensor, ForceSensor, Motor
 from core.index import Core
 from io.controller import Controller
 
-from eventLoop import eventLoop
+from eventLoop import EventLoop
 
 
 # Set up all devices.
@@ -21,6 +21,7 @@ leftMotor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
 XBoxController = XboxController()
 
 refreshRate = 50  # milliseconds
+
 core = Core(
     refreshRate,
     hub,
@@ -34,5 +35,4 @@ core = Core(
 
 controller = Controller(XBoxController)
 
-while True:
-    eventLoop(core, controller, refreshRate)
+EventLoop(core, controller, refreshRate).run()
