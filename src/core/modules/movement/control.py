@@ -26,7 +26,7 @@ class Control:
         self._backwardLeft = backwardLeft
         self._backwardRight = backwardRight
 
-    def controlledBehavior(
+    def listenForBehavior(
         self,
         isForward: bool,
         forwardPercent: int,

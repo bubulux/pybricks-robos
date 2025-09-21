@@ -16,7 +16,7 @@ class EventLoop:
         isBackward, backwardPercent = self._controller.backward()
         tiltDirection, tiltPercent = self._controller.tilt()
 
-        self._core.movement.control.controlledBehavior(
+        self._core.movement.control.listenForBehavior(
             isForward,
             forwardPercent,
             isBackward,
@@ -24,7 +24,6 @@ class EventLoop:
             tiltDirection,
             tiltPercent,
         )
-
         self._core.feeler.listenForHits()
         self._core.color.listenForState()
 
