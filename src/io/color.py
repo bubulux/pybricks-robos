@@ -25,11 +25,11 @@ class Color:
         # Orange == DAMAGING
         # White == NEUTRAL
 
-        return "FORBIDDEN"
+        # return "FORBIDDEN"
         # return "HEALING"
         # return "PROTECTED"
         # return "DAMAGING"
-        # return "NEUTRAL"
+        return "NEUTRAL"
 
     def _execStateEffect(
         self,
@@ -54,8 +54,7 @@ class Color:
     def _updateCallBack(self):
         hue, saturation, value = self._colorSensor.hsv()
         state = self._colorToState(hue, saturation, value)
-        print(state)
         self._execStateEffect(state)
 
-    def listenForStateUpdates(self):
+    def listenForState(self):
         self._onOneSecondUpdate(self._updateCallBack)
