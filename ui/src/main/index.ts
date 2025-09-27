@@ -4,6 +4,9 @@ import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 import { readFileSync } from "fs";
 import * as chokidar from "chokidar";
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+} from "electron-devtools-installer";
 
 function createWindow(): void {
   // Create the browser window.
@@ -40,7 +43,17 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // Install React DevTools
+  if (is.dev) {
+    try {
+      await installExtension(REACT_DEVELOPER_TOOLS);
+      console.log("React DevTools installed successfully");
+    } catch (err) {
+      console.log("Error installing React DevTools: ", err);
+    }
+  }
+
   // Set app user model id for windows
   electronApp.setAppUserModelId("com.electron");
 
