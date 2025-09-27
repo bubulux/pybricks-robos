@@ -43,7 +43,7 @@ function App(): React.JSX.Element {
           }}
         >
           <Flex flex={1}>
-            <Flex style={{ width: "10%" }}>MonitorConnection</Flex>
+            <Flex style={{ width: "10%" }}>Monitor</Flex>
             <Divider size="lg" color="blue" orientation="vertical" />
             <Flex direction={"column"} style={{ width: "90%" }}>
               <Flex
