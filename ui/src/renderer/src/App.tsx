@@ -1,6 +1,8 @@
 import { useStream } from "./stream";
 import { AppShell, Flex, Divider } from "@mantine/core";
 
+import { MonitorState } from "@renderer/partials";
+
 function App(): React.JSX.Element {
   const { data: streamData } = useStream();
 
@@ -15,7 +17,7 @@ function App(): React.JSX.Element {
       >
         <Flex
           style={{
-            height: "70%",
+            height: "80%",
           }}
         >
           <Flex
@@ -39,16 +41,18 @@ function App(): React.JSX.Element {
         <Divider size="lg" color="blue" />
         <Flex
           style={{
-            height: "30%",
+            height: "20%",
           }}
         >
           <Flex flex={1}>
-            <Flex style={{ width: "10%" }}>Monitor</Flex>
+            <Flex style={{ width: "10%" }}>
+              <MonitorState state="Disconnected" />
+            </Flex>
             <Divider size="lg" color="blue" orientation="vertical" />
             <Flex direction={"column"} style={{ width: "90%" }}>
               <Flex
                 style={{
-                  height: "80%",
+                  height: "70%",
                 }}
               >
                 HealthHistory
