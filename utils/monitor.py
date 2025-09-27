@@ -2,10 +2,35 @@ import subprocess
 from datetime import datetime
 import os
 import time
-from typing import TextIO
+import signal
+import atexit
+import sys
+from types import FrameType
+from typing import TextIO, Optional, NoReturn
+
+
+# Global variables
+csv_file_handle: Optional[TextIO] = None
+csv_filename: Optional[str] = None
+
+
+def cleanup_handler() -> None:
+    """Write END status and close file when program exits"""
+    if csv_file_handle and not csv_file_handle.closed:
+        csv_file_handle.write("END,END,END,END,END\n")
+        csv_file_handle.flush()
+        csv_file_handle.close()
+
+
+def signal_handler(signum: int, frame: Optional[FrameType]) -> NoReturn:
+    """Handle signals by calling cleanup and then exiting"""
+    cleanup_handler()
+    sys.exit(0)
 
 
 def capture_robot_logs():
+    global csv_file_handle, csv_filename
+
     # Create ui/stream directory if it doesn't exist
     stream_dir = "ui/stream"
     if not os.path.exists(stream_dir):
@@ -14,6 +39,11 @@ def capture_robot_logs():
     # CSV file for real-time data streaming
     csv_filename = "ui/stream/info.csv"
 
+    # Register cleanup handlers
+    atexit.register(cleanup_handler)
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
     print("=" * 50)
     print("🎯 Listening to robot logs...")
     print(f"📁 Streaming CSV to: {csv_filename}")
@@ -21,10 +51,13 @@ def capture_robot_logs():
     print("=" * 50)
 
     # Initialize CSV file with header and INIT row
-    with open(csv_filename, "w", encoding="utf-8") as csv_file:
-        csv_file.write("HEALTH,LIGHT, PRESSURE_LEFT, PRESSURE_RIGHT, PRESSURE_BACK\n")
-        csv_file.write("INIT, INIT, INIT, INIT, INIT\n")
-        csv_file.flush()
+    global csv_file_handle
+    csv_file_handle = open(csv_filename, "w", encoding="utf-8")
+    csv_file_handle.write(
+        "HEALTH,LIGHT, PRESSURE_LEFT, PRESSURE_RIGHT, PRESSURE_BACK\n"
+    )
+    csv_file_handle.write("INIT, INIT, INIT, INIT, INIT\n")
+    csv_file_handle.flush()
 
     process = None
     try:
@@ -52,42 +85,42 @@ def capture_robot_logs():
             env={**os.environ, "PYTHONUNBUFFERED": "1"},
         )
 
-        with open(csv_filename, "a", encoding="utf-8") as csv_file:
-            # Real-time monitoring using character-by-character reading
-            output_buffer = ""
+        csv_file_handle.seek(0, 2)  # Seek to end of file for appending
+        # Real-time monitoring using character-by-character reading
+        output_buffer = ""
 
-            while True:
-                # Check if process is still running
-                if process.poll() is not None:
-                    # Process has ended, no need to process remaining output
-                    # since we've been processing line by line in real-time
-                    break
+        while True:
+            # Check if process is still running
+            if process.poll() is not None:
+                # Process has ended, no need to process remaining output
+                # since we've been processing line by line in real-time
+                break
 
-                # Read one character at a time for immediate processing
-                try:
-                    char = process.stdout.read(1)  # type: ignore
-                    if char:
-                        output_buffer += char
+            # Read one character at a time for immediate processing
+            try:
+                char = process.stdout.read(1)  # type: ignore
+                if char:
+                    output_buffer += char
 
-                        # Process complete lines immediately
-                        if char == "\n":
-                            lines = output_buffer.split("\n")
-                            # Process all complete lines
-                            # (all but the last, which might be incomplete)
-                            for line in lines[:-1]:
-                                if line.strip():  # Skip empty lines
-                                    _write_csv_entry(line.strip(), csv_file)
+                    # Process complete lines immediately
+                    if char == "\n":
+                        lines = output_buffer.split("\n")
+                        # Process all complete lines
+                        # (all but the last, which might be incomplete)
+                        for line in lines[:-1]:
+                            if line.strip():  # Skip empty lines
+                                _write_csv_entry(line.strip())
 
-                            # Keep the last (potentially incomplete) line in buffer
-                            output_buffer = lines[-1]
-                    else:
-                        # No more data available right now,
-                        # small sleep to prevent busy waiting
-                        time.sleep(0.001)
+                        # Keep the last (potentially incomplete) line in buffer
+                        output_buffer = lines[-1]
+                else:
+                    # No more data available right now,
+                    # small sleep to prevent busy waiting
+                    time.sleep(0.001)
 
-                except Exception as e:
-                    print(f"Error reading from process: {e}")
-                    break
+            except Exception as e:
+                print(f"Error reading from process: {e}")
+                break
 
         # Wait for process to complete
         if process:
@@ -100,16 +133,17 @@ def capture_robot_logs():
     except Exception as e:
         print(f"\n❌ Error occurred: {e}")
     finally:
+        cleanup_handler()
         print(f"📝 CSV data saved to: {csv_filename}")
 
 
-def _write_csv_entry(line: str, csv_file: TextIO) -> None:
+def _write_csv_entry(line: str) -> None:
     """Write pure CSV data to file and display to console"""
     # Filter out non-CSV lines (connection progress, search messages, etc.)
-    if _is_valid_csv_line(line):
+    if _is_valid_csv_line(line) and csv_file_handle:
         # Write pure CSV line to file (no timestamp, no formatting)
-        csv_file.write(f"{line}\n")
-        csv_file.flush()
+        csv_file_handle.write(f"{line}\n")
+        csv_file_handle.flush()
 
     # Display to console with timestamp for monitoring (all lines)
     timestamp_str = datetime.now().strftime("%H:%M:%S.%f")[:-3]
