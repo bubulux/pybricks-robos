@@ -1,1 +1,1 @@
-export { default as MonitorState } from "@renderer/partials/MonitorState";
+export { default as MonitorStatePartial } from "@renderer/partials/MonitorState";

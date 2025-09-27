@@ -1,10 +1,10 @@
 import { useStream } from "./stream";
 import { AppShell, Flex, Divider } from "@mantine/core";
 
-import { MonitorState } from "@renderer/partials";
+import { MonitorStateWired } from "@renderer/wired";
 
 function App(): React.JSX.Element {
-  const { data: streamData } = useStream();
+  const { data } = useStream();
 
   return (
     <AppShell>
@@ -46,7 +46,7 @@ function App(): React.JSX.Element {
         >
           <Flex flex={1}>
             <Flex style={{ width: "10%" }}>
-              <MonitorState state="Disconnected" />
+              <MonitorStateWired data={data} />
             </Flex>
             <Divider size="lg" color="blue" orientation="vertical" />
             <Flex direction={"column"} style={{ width: "90%" }}>
