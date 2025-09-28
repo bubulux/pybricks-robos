@@ -4,6 +4,7 @@ import {
   IconArrowBigDown,
   IconPlus,
   IconMinus,
+  IconSkull,
 } from "@tabler/icons-react";
 import terryImage from "./terry.jpg";
 
@@ -59,17 +60,33 @@ export default function HealthMonitor({
           )}
         </Group>
       </Stack>
-      <Stack flex={1} h={"100%"} gap={0} bd={"4px solid white"} bdrs={"md"}>
-        <Flex bg="red.5" w="100%" h={`${100 - health}%`} />
-        <Flex
-          bg="green.5"
-          w="100%"
-          h={`${health}%`}
-          justify={"center"}
-          align={"center"}
-        >
-          <Title c="white">{health}</Title>
-        </Flex>
+      <Stack
+        flex={1}
+        h={"100%"}
+        gap={0}
+        bd={"4px solid white"}
+        bdrs={"md"}
+        justify="center"
+        align="center"
+      >
+        {health > 0 ? (
+          <>
+            <Flex bg="red.5" w="100%" h={`${100 - health}%`} />
+            <Flex
+              bg="green.5"
+              w="100%"
+              h={`${health}%`}
+              justify={"center"}
+              align={"center"}
+            >
+              <Title c="white">{health}</Title>
+            </Flex>
+          </>
+        ) : (
+          <ThemeIcon size={128} variant="transparent" color="red">
+            <IconSkull size={128} />
+          </ThemeIcon>
+        )}
       </Stack>
     </Group>
   );
