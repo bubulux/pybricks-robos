@@ -1,3 +1,4 @@
+import { Loader, Group, Title } from "@mantine/core";
 import { AreaChart } from "@mantine/charts";
 
 type TData = {
@@ -7,10 +8,21 @@ type TData = {
 
 type TProps = {
   data: TData[];
+  isLoading: boolean;
 };
 
-export default function HealthHistory({ data }: TProps): React.JSX.Element {
-  return (
+export default function HealthHistory({
+  data,
+  isLoading,
+}: TProps): React.JSX.Element {
+  return isLoading ? (
+    <Group justify="center" align="center" flex={1} gap={10}>
+      <Loader color="yellow" />
+      <Title order={4}>
+        Connecting to Terry, history will be available soon...
+      </Title>
+    </Group>
+  ) : (
     <AreaChart
       withXAxis={false}
       withYAxis={false}

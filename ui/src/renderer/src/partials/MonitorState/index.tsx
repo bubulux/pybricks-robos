@@ -6,7 +6,7 @@ import {
   IconRobot,
 } from "@tabler/icons-react";
 
-type TState = "Disconnected" | "Connecting" | "Connected";
+import { TState } from "@renderer/types";
 
 type TProps = {
   state: TState;

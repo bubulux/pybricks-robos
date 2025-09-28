@@ -42,7 +42,7 @@ function App(): React.JSX.Element {
               </Flex>
               <Divider size="lg" color="blue" />
               <Flex flex={1}>
-                <DataHistoryWired history={history} />
+                <DataHistoryWired history={history} data={data} />
               </Flex>
             </Flex>
           </Flex>

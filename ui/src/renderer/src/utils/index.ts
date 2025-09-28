@@ -4,6 +4,8 @@ import {
   TSensorValue,
 } from "@renderer/stream/models";
 
+import { TState } from "@renderer/types";
+
 export function selectMostRecentSensorData(data: TRobotSensorData): {
   Health: Omit<TSensorValue, "NONE">;
   Light: Omit<TLightValue, "NONE">;
@@ -19,4 +21,18 @@ export function selectMostRecentSensorData(data: TRobotSensorData): {
 
 export function selectHealthHistory(data: TRobotSensorData): number[] {
   return data.HEALTH.filter((v) => typeof v === "number");
+}
+
+export function selectCurrenState(data: TRobotSensorData): TState {
+  const { Health, Light } = selectMostRecentSensorData(data);
+
+  if (Health === "INIT" || Light === "INIT") {
+    return "Connecting";
+  }
+
+  if (Health === "START" || Light === "START" || typeof Health === "number") {
+    return "Connected";
+  }
+
+  return "Disconnected";
 }
