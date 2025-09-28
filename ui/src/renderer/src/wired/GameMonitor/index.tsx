@@ -1,3 +1,5 @@
+import { useEffect, useCallback, useRef } from "react";
+
 import { GameMonitorPartial } from "@renderer/partials";
 import { TRobotSensorData } from "@renderer/stream/models";
 import {
@@ -6,6 +8,7 @@ import {
 } from "@renderer/utils";
 
 import { TGameStatus } from "@renderer/types";
+import { useGameTimer } from "@renderer/wired/GameMonitor/timer";
 
 type TProps = {
   data: TRobotSensorData;
@@ -13,26 +16,50 @@ type TProps = {
 
 export default function GameMonitor({ data }: TProps): React.JSX.Element {
   const state = selectCurrentState(data);
+  const prevState = useRef(state);
   const { Health, Light } = selectMostRecentSensorData(data);
+  const { totalTimeS, timeLeftS, pauseTime, restartTime } = useGameTimer();
+
+  const isWin = useCallback((): boolean => {
+    return Light === "WIN";
+  }, [Light]);
+
+  const isLose = useCallback((): boolean => {
+    return typeof Health === "number" && Health <= 0;
+  }, [Health]);
+
+  function isRunning(): boolean {
+    return typeof Health === "number" && Health > 0;
+  }
 
   function determineGameStatus(): TGameStatus {
-    if (Light === "WIN") return "Won";
+    if (timeLeftS === 0) return "Lost";
+
+    if (isWin()) return "Won";
 
     if (state === "Disconnected" || state === "Connecting") return "Idle";
 
-    if (typeof Health === "number") {
-      if (Health > 0) return "Running";
-      if (Health <= 0) return "Lost";
-    }
+    if (isLose()) return "Lost";
+
+    if (isRunning()) return "Running";
 
     return "Idle";
   }
 
+  useEffect(() => {
+    if (state === "Connected" && prevState.current !== "Connected")
+      restartTime();
+    if (state === "Disconnected" || isWin() || isLose()) {
+      pauseTime();
+    }
+    prevState.current = state;
+  }, [pauseTime, restartTime, isWin, isLose, state, Light]);
+
   return (
     <GameMonitorPartial
       status={determineGameStatus()}
-      totalTimeS={300}
-      timeLeftS={290}
+      totalTimeS={totalTimeS}
+      timeLeftS={timeLeftS}
       state={state}
     />
   );
