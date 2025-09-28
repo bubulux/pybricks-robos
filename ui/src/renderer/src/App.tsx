@@ -10,7 +10,7 @@ import {
 } from "@renderer/wired";
 
 function App(): React.JSX.Element {
-  const { data, history } = useStream();
+  const { data, history, resetHistory } = useStream();
 
   return (
     <AppShell h={"100vh"} w={"100vw"}>
@@ -36,7 +36,11 @@ function App(): React.JSX.Element {
             </Flex>
             <Divider size="lg" />
             <Flex flex={1}>
-              <DataHistoryWired history={history} data={data} />
+              <DataHistoryWired
+                history={history}
+                data={data}
+                resetHistory={resetHistory}
+              />
             </Flex>
           </Flex>
         </Flex>

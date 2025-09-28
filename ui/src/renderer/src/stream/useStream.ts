@@ -5,6 +5,7 @@ import { TRobotSensorData, ZRobotSensorData } from "./models";
 export default function useStream(): {
   data: TRobotSensorData;
   history: boolean[];
+  resetHistory: () => void;
 } {
   const [data, setData] = useState<TRobotSensorData>({
     HEALTH: [],
@@ -50,5 +51,11 @@ export default function useStream(): {
     };
   }, [handleNewData]);
 
-  return { data, history };
+  return {
+    data,
+    history,
+    resetHistory: () => {
+      setHistory([]);
+    },
+  };
 }
