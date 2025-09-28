@@ -1,4 +1,4 @@
-import { Loader, Title, Stack, Flex, Group, Tooltip } from "@mantine/core";
+import { Loader, Title, Stack, Flex, Group, Tooltip, Box } from "@mantine/core";
 
 import {
   IconAlertCircle,
@@ -23,6 +23,10 @@ export default function MonitorState({ state }: TProps): React.JSX.Element {
       </Title>
       <Tooltip label={state} withArrow position="bottom">
         <Flex
+          p={6}
+          bdrs={"rounded"}
+          h={"fit-content"}
+          w={"fit-content"}
           bg={
             state === "Disconnected"
               ? "red"
@@ -30,12 +34,6 @@ export default function MonitorState({ state }: TProps): React.JSX.Element {
                 ? "yellow"
                 : "green"
           }
-          style={{
-            padding: 6,
-            height: "fit-content",
-            width: "fit-content",
-            borderRadius: "100px",
-          }}
         >
           {state === "Disconnected" ? (
             <IconAlertCircle size={48} color="white" />

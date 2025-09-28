@@ -26,9 +26,7 @@ export default function HealthHistory({
     <AreaChart
       withXAxis={false}
       withYAxis={false}
-      style={{
-        padding: 10,
-      }}
+      p={10}
       data={data}
       dataKey="time"
       series={[{ name: "value", color: "green" }]}

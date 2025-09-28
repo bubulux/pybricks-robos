@@ -7,5 +7,5 @@ type TProps = {
 
 export default function GameMonitor({ data }: TProps): React.JSX.Element {
   // Here you would transform data as needed
-  return <GameMonitorPartial />;
+  return <GameMonitorPartial status="Idle" totalTimeS={300} timeLeftS={290} />;
 }
