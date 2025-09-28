@@ -14,13 +14,13 @@ export function convertLeftTimeSToMMSS(timeLeftS: number): string {
 export function getStatusColor(status: TGameStatus): string {
   switch (status) {
     case "Running":
-      return "green";
+      return "yellow";
     case "Won":
-      return "blue";
+      return "green";
     case "Lost":
       return "red";
     case "Idle":
-      return "yellow";
+      return "orange";
     default:
       return "gray";
   }

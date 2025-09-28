@@ -2,7 +2,7 @@ from core.index import Core
 from pybricks.tools import wait
 
 from io.controller import Controller
-from utils.streamer import streamEnd, streamStart
+from utils.streamer import streamStart
 
 
 class EventLoop:
@@ -34,10 +34,5 @@ class EventLoop:
         streamStart()
 
         while True:
-            isAlive = self._roboLoop()
-
-            if not isAlive:
-                streamEnd()
-                break
-
+            self._roboLoop()
             wait(self._refreshRate)

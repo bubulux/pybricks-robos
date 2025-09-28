@@ -13,9 +13,9 @@ function App(): React.JSX.Element {
   const { data, history } = useStream();
 
   return (
-    <AppShell>
-      <Flex direction={"column"} h={"100vh"} w={"100vw"}>
-        <Flex h={"80%"}>
+    <AppShell h={"100vh"} w={"100vw"}>
+      <Flex direction={"column"} h={"100%"} w={"100%"} p={24}>
+        <Flex h={"70%"}>
           <Flex w={"20%"}>
             <FieldMonitorWired data={data} />
           </Flex>
@@ -29,7 +29,7 @@ function App(): React.JSX.Element {
           </Flex>
         </Flex>
         <Divider size="lg" />
-        <Flex h={"20%"}>
+        <Flex flex={1}>
           <Flex direction={"column"} flex={1}>
             <Flex h={"90%"}>
               <HealthHistoryWired data={data} />

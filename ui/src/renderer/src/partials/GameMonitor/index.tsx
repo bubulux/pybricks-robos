@@ -66,7 +66,7 @@ export default function GameMonitor({
         <Text size="xl" fw={700}>
           Time left:
         </Text>
-        <Text size="xl" fw={700} c="teal">
+        <Text size="xl" fw={700} c="blue">
           {convertLeftTimeSToMMSS(timeLeftS)}
         </Text>
       </Group>

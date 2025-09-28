@@ -31,7 +31,7 @@ class Color:
         # return "PROTECTED"
         # return "DAMAGING"#
         # return "WIN"
-        return "NEUTRAL"
+        return "WIN"
 
     def _execStateEffect(
         self,
