@@ -19,6 +19,37 @@ export function selectMostRecentSensorData(data: TRobotSensorData): {
   };
 }
 
+export function selectMostRecentHealthNumber(data: TRobotSensorData): number {
+  const healthData = data.HEALTH.filter((v) => typeof v === "number").slice(
+    -1,
+  )[0];
+  return typeof healthData === "number" ? healthData : 0;
+}
+
+export function selectMostRecentLightEffect(data: TRobotSensorData): {
+  mode: "harm" | "heal" | "neutral";
+  effect: number;
+} {
+  const lightData = data.LIGHT.filter((v) => {
+    return (
+      v === "DAMAGING" ||
+      v === "FORBIDDEN" ||
+      v === "NEUTRAL" ||
+      v === "HEALING"
+    );
+  });
+
+  const light = lightData.slice(-1)[0];
+
+  if (light === "DAMAGING") return { mode: "harm", effect: 3 };
+
+  if (light === "FORBIDDEN") return { mode: "harm", effect: 20 };
+
+  if (light === "HEALING") return { mode: "heal", effect: 5 };
+
+  return { mode: "neutral", effect: 0 };
+}
+
 export function selectHealthHistory(data: TRobotSensorData): number[] {
   return data.HEALTH.filter((v) => typeof v === "number");
 }
