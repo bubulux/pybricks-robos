@@ -35,7 +35,7 @@ export default function GameMonitor({
   ];
 
   return (
-    <Stack p={10} flex={1} align="center" justify="center" gap={24}>
+    <Stack flex={1} align="center" justify="center" gap={24}>
       <Group align="center" justify="center">
         <IconRobot size={52} />
         <Tooltip label={state} withArrow position="bottom">
@@ -50,7 +50,7 @@ export default function GameMonitor({
           </Flex>
         </Tooltip>
       </Group>
-      <Divider size="lg" w={"100%"} bdrs="lg" />
+      <Divider size="lg" w={"100%"} />
       <Group gap="xs">
         <Text fw={700} size="xl">
           Status:
@@ -59,9 +59,9 @@ export default function GameMonitor({
           {status}
         </Text>
       </Group>
-      <Divider size="lg" w={"100%"} bdrs="lg" />
+      <Divider size="lg" w={"100%"} />
       <PieChart data={data} strokeWidth={0} w={"100%"} />
-      <Divider size="lg" w={"100%"} bdrs="lg" />
+      <Divider size="lg" w={"100%"} />
       <Group gap="xs">
         <Text size="xl" fw={700}>
           Time left:
