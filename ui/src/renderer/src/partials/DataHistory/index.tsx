@@ -1,11 +1,19 @@
-import { Stack, Title } from "@mantine/core";
+import { BarChart } from "@mantine/charts";
 
-type TProps = Record<string, never>;
+type TProps = {
+  history: {
+    time: number;
+    value: "Success" | "Error";
+  }[];
+};
 
-export default function DataHistory(_props: TProps): React.JSX.Element {
+export default function DataHistory({ history }: TProps): React.JSX.Element {
   return (
-    <Stack>
-      <Title order={4}>Data History</Title>
-    </Stack>
+    <BarChart
+      type="percent"
+      orientation="horizontal"
+      withXAxis={false}
+      withYAxis={false}
+    />
   );
 }
