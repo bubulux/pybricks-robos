@@ -1,10 +1,17 @@
 import { useStream } from "./stream";
 import { AppShell, Flex, Divider } from "@mantine/core";
 
-import { MonitorStateWired, HealthHistoryWired } from "@renderer/wired";
+import {
+  MonitorStateWired,
+  HealthHistoryWired,
+  FieldMonitorWired,
+  HealthMonitorWired,
+  GameMonitorWired,
+  DataHistoryWired,
+} from "@renderer/wired";
 
 function App(): React.JSX.Element {
-  const { data } = useStream();
+  const { data, history } = useStream();
 
   return (
     <AppShell>
@@ -25,17 +32,19 @@ function App(): React.JSX.Element {
               width: "20%",
             }}
           >
-            FieldStatus
+            <FieldMonitorWired data={data} />
           </Flex>
           <Divider size="lg" color="blue" orientation="vertical" />
-          <Flex flex={1}>HealthMonitor</Flex>
+          <Flex flex={1}>
+            <HealthMonitorWired data={data} />
+          </Flex>
           <Divider size="lg" color="blue" orientation="vertical" />
           <Flex
             style={{
               width: "20%",
             }}
           >
-            GameTracker
+            <GameMonitorWired data={data} />
           </Flex>
         </Flex>
         <Divider size="lg" color="blue" />
@@ -58,7 +67,9 @@ function App(): React.JSX.Element {
                 <HealthHistoryWired data={data} />
               </Flex>
               <Divider size="lg" color="blue" />
-              <Flex>ErrorHistory</Flex>
+              <Flex>
+                <DataHistoryWired history={history} />
+              </Flex>
             </Flex>
           </Flex>
         </Flex>
