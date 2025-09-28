@@ -24,7 +24,7 @@ export default function MonitorState({ state }: TProps): React.JSX.Element {
       <Tooltip label={state} withArrow position="bottom">
         <Flex
           p={6}
-          bdrs={"rounded"}
+          bdrs={"100px"}
           h={"fit-content"}
           w={"fit-content"}
           bg={

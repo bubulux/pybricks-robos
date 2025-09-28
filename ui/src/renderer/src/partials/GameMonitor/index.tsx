@@ -1,18 +1,29 @@
-import { Stack, Title, Divider, Group, Text } from "@mantine/core";
+import { Stack, Divider, Group, Text, Tooltip, Flex } from "@mantine/core";
 import { PieChart } from "@mantine/charts";
 
-import { TGameStatus } from "@renderer/types";
+import { IconRobot } from "@tabler/icons-react";
+
+import { TGameStatus, TState } from "@renderer/types";
+
+import {
+  convertLeftTimeSToMMSS,
+  getStateColor,
+  getStateIcon,
+  getStatusColor,
+} from "./utils";
 
 type TProps = {
   totalTimeS: number;
   timeLeftS: number;
   status: TGameStatus;
+  state: TState;
 };
 
 export default function GameMonitor({
   totalTimeS,
   timeLeftS,
   status,
+  state,
 }: TProps): React.JSX.Element {
   const data = [
     { value: timeLeftS, color: "green.5", name: "Time Left" },
@@ -23,32 +34,23 @@ export default function GameMonitor({
     },
   ];
 
-  function convertLeftTimeSToMMSS(timeLeftS: number): string {
-    const minutes = Math.floor(timeLeftS / 60);
-    const seconds = timeLeftS % 60;
-    return `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
-  }
-
-  // Function to determine status color
-  function getStatusColor(status: TGameStatus): string {
-    switch (status) {
-      case "Running":
-        return "green";
-      case "Won":
-        return "blue";
-      case "Lost":
-        return "red";
-      case "Idle":
-        return "yellow";
-      default:
-        return "gray";
-    }
-  }
-
   return (
-    <Stack p={10} flex={1} align="center" gap={24}>
+    <Stack p={10} flex={1} align="center" justify="center" gap={24}>
+      <Group align="center" justify="center">
+        <IconRobot size={52} />
+        <Tooltip label={state} withArrow position="bottom">
+          <Flex
+            p={6}
+            bdrs={"100px"}
+            h={"fit-content"}
+            w={"fit-content"}
+            bg={getStateColor(state)}
+          >
+            {getStateIcon(state)}
+          </Flex>
+        </Tooltip>
+      </Group>
+      <Divider size="lg" w={"100%"} bdrs="lg" />
       <Group gap="xs">
         <Text fw={700} size="xl">
           Status:
@@ -57,12 +59,18 @@ export default function GameMonitor({
           {status}
         </Text>
       </Group>
-      <Divider size="lg" w={"100%"} color="blue" bdrs="lg" />
+      <Divider size="lg" w={"100%"} bdrs="lg" />
       <PieChart data={data} strokeWidth={0} w={"100%"} />
-      <Divider size="lg" w={"100%"} color="blue" bdrs="lg" />
-      <Text size="xl" fw={700}>
-        {convertLeftTimeSToMMSS(timeLeftS)}
-      </Text>
+      <Divider size="lg" w={"100%"} bdrs="lg" />
+
+      <Group gap="xs">
+        <Text size="xl" fw={700}>
+          Time left:
+        </Text>
+        <Text size="xl" fw={700} c="teal">
+          {convertLeftTimeSToMMSS(timeLeftS)}
+        </Text>
+      </Group>
     </Stack>
   );
 }

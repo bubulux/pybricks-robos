@@ -20,27 +20,27 @@ function App(): React.JSX.Element {
           <Flex w={"20%"}>
             <FieldMonitorWired data={data} />
           </Flex>
-          <Divider size="lg" color="blue" orientation="vertical" />
+          <Divider size="lg" orientation="vertical" />
           <Flex flex={1}>
             <HealthMonitorWired data={data} />
           </Flex>
-          <Divider size="lg" color="blue" orientation="vertical" />
+          <Divider size="lg" orientation="vertical" />
           <Flex w={"20%"}>
             <GameMonitorWired data={data} />
           </Flex>
         </Flex>
-        <Divider size="lg" color="blue" />
+        <Divider size="lg" />
         <Flex h={"20%"}>
           <Flex flex={1}>
             <Flex w={"10%"}>
               <MonitorStateWired data={data} />
             </Flex>
-            <Divider size="lg" color="blue" orientation="vertical" />
+            <Divider size="lg" orientation="vertical" />
             <Flex direction={"column"} w={"90%"}>
               <Flex h={"90%"}>
                 <HealthHistoryWired data={data} />
               </Flex>
-              <Divider size="lg" color="blue" />
+              <Divider size="lg" />
               <Flex flex={1}>
                 <DataHistoryWired history={history} data={data} />
               </Flex>
