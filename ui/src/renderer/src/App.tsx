@@ -15,23 +15,9 @@ function App(): React.JSX.Element {
 
   return (
     <AppShell>
-      <Flex
-        direction={"column"}
-        style={{
-          height: "100vh",
-          width: "100vw",
-        }}
-      >
-        <Flex
-          style={{
-            height: "80%",
-          }}
-        >
-          <Flex
-            style={{
-              width: "20%",
-            }}
-          >
+      <Flex direction={"column"} h={"100vh"} w={"100vw"}>
+        <Flex h={"80%"}>
+          <Flex w={"20%"}>
             <FieldMonitorWired data={data} />
           </Flex>
           <Divider size="lg" color="blue" orientation="vertical" />
@@ -39,35 +25,23 @@ function App(): React.JSX.Element {
             <HealthMonitorWired data={data} />
           </Flex>
           <Divider size="lg" color="blue" orientation="vertical" />
-          <Flex
-            style={{
-              width: "20%",
-            }}
-          >
+          <Flex w={"20%"}>
             <GameMonitorWired data={data} />
           </Flex>
         </Flex>
         <Divider size="lg" color="blue" />
-        <Flex
-          style={{
-            height: "20%",
-          }}
-        >
+        <Flex h={"20%"}>
           <Flex flex={1}>
-            <Flex style={{ width: "10%" }}>
+            <Flex w={"10%"}>
               <MonitorStateWired data={data} />
             </Flex>
             <Divider size="lg" color="blue" orientation="vertical" />
-            <Flex direction={"column"} style={{ width: "90%" }}>
-              <Flex
-                style={{
-                  height: "70%",
-                }}
-              >
+            <Flex direction={"column"} w={"90%"}>
+              <Flex h={"90%"}>
                 <HealthHistoryWired data={data} />
               </Flex>
               <Divider size="lg" color="blue" />
-              <Flex>
+              <Flex flex={1}>
                 <DataHistoryWired history={history} />
               </Flex>
             </Flex>
