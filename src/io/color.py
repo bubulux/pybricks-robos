@@ -8,6 +8,7 @@ class Color:
     def __init__(
         self,
         colorSensor: ColorSensor,
+        setIsProtected: "Callable[[bool], None]",
         harm: "Callable[[int], None]",
         heal: "Callable[[int], None]",
         onOneSecondUpdate: "Callable[[Callable[[], None]], None]",
@@ -16,6 +17,7 @@ class Color:
         self._harm = harm
         self._heal = heal
         self._onOneSecondUpdate = onOneSecondUpdate
+        self._setIsProtected = setIsProtected
 
     def _colorToState(self, hue: int, saturation: int, value: int):
 
@@ -40,17 +42,22 @@ class Color:
         ],
     ):
         if state == "FORBIDDEN":
+            self._setIsProtected(False)
             streamLightState("FORBIDDEN")
-            self._harm(1)
+            self._harm(20)
         elif state == "HEALING":
+            self._setIsProtected(False)
             streamLightState("HEALING")
             self._heal(5)
         elif state == "PROTECTED":
+            self._setIsProtected(True)
             streamLightState("PROTECTED")
         elif state == "DAMAGING":
+            self._setIsProtected(False)
             streamLightState("DAMAGING")
             self._harm(3)
         elif state == "NEUTRAL":
+            self._setIsProtected(False)
             streamLightState("NEUTRAL")
         elif state == "WIN":
             streamLightState("WIN")

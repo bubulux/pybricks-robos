@@ -31,8 +31,9 @@ class Core:
         self.colorSensor = colorSensor
         self.rightMotor = rightMotor
         self.leftMotor = leftMotor
+        self.isProtected = False
 
-        self.health = Health()
+        self.health = Health(self.isProtected)
         self.movement = Movement(self.rightMotor, self.leftMotor)
         self.display = Display()
         self.feeler = Feeler(
@@ -43,12 +44,16 @@ class Core:
         )
         self.color = Color(
             self.colorSensor,
+            self._setIsProtected,
             self.health.harm,
             self.health.heal,
             self._onOneSecondUpdate,
         )
         self._eventLoopRefreshRate = eventLoopRefreshRate
         self._accumulatedTime = 0
+
+    def _setIsProtected(self, value: bool):
+        self.isProtected = value
 
     def _onOneSecondUpdate(self, cb: "Callable[[], None]"):
         if self._accumulatedTime >= 1000:

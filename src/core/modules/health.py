@@ -2,6 +2,10 @@ from utils.streamer import streamHealth
 
 
 class Health:
+
+    def __init__(self, isProtected: bool):
+        self.isProtected = isProtected
+
     healthpoints = 100
 
     def check(self):
@@ -11,6 +15,8 @@ class Health:
             return True
 
     def harm(self, damage: int):
+        if self.isProtected:
+            return
         self.healthpoints -= damage
         streamHealth(self.healthpoints)
 

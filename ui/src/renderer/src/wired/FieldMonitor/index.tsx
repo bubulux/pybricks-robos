@@ -7,5 +7,5 @@ type TProps = {
 
 export default function FieldMonitor({ data }: TProps): React.JSX.Element {
   // Here you would transform data as needed
-  return <FieldMonitorPartial />;
+  return <FieldMonitorPartial field="Damaging" />;
 }
