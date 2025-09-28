@@ -1,7 +1,7 @@
 import { useStream } from "./stream";
 import { AppShell, Flex, Divider } from "@mantine/core";
 
-import { MonitorStateWired } from "@renderer/wired";
+import { MonitorStateWired, HealthHistoryWired } from "@renderer/wired";
 
 function App(): React.JSX.Element {
   const { data } = useStream();
@@ -55,10 +55,10 @@ function App(): React.JSX.Element {
                   height: "70%",
                 }}
               >
-                HealthHistory
+                <HealthHistoryWired data={data} />
               </Flex>
               <Divider size="lg" color="blue" />
-              <Flex>DataHistory</Flex>
+              <Flex>ErrorHistory</Flex>
             </Flex>
           </Flex>
         </Flex>

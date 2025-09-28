@@ -14,13 +14,7 @@ type TProps = {
 
 export default function MonitorState({ state }: TProps): React.JSX.Element {
   return (
-    <Stack
-      align="center"
-      flex={1}
-      style={{
-        paddingTop: 6,
-      }}
-    >
+    <Stack align="center" justify="center" flex={1}>
       <Title order={4}>
         <Group gap={4}>
           Terry

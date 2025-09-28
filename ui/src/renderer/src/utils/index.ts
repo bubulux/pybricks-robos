@@ -16,3 +16,7 @@ export function selectMostRecentSensorData(data: TRobotSensorData): {
     Light: lightData,
   };
 }
+
+export function selectHealthHistory(data: TRobotSensorData): number[] {
+  return data.HEALTH.filter((v) => typeof v === "number");
+}
