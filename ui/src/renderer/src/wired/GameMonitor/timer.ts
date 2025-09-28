@@ -22,7 +22,7 @@ interface UseGameTimerReturn {
  * @returns An object with timing control functions and current time values
  */
 export const useGameTimer = ({
-  initialTimeS = 60,
+  initialTimeS = 300,
   autoStart = false,
 }: UseGameTimerProps = {}): UseGameTimerReturn => {
   const [totalTimeS] = useState<number>(initialTimeS);
