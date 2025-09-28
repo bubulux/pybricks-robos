@@ -91,6 +91,7 @@ def streamStart() -> None:
         pressureRight="START",
         pressureBack="START",
     )
+    streamHealth(100)  # Initial health value
 
 
 def streamEnd() -> None:
