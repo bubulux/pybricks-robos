@@ -6,6 +6,11 @@ type TProps = {
 };
 
 export default function HealthMonitor({ data }: TProps): React.JSX.Element {
-  // Here you would transform data as needed
-  return <HealthMonitorPartial />;
+  return (
+    <HealthMonitorPartial
+      health={50}
+      currentEffect="neutral"
+      effectImpact={10}
+    />
+  );
 }

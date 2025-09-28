@@ -1,5 +1,5 @@
 import { useStream } from "./stream";
-import { AppShell, Flex, Divider } from "@mantine/core";
+import { AppShell, Flex, Divider, Stack } from "@mantine/core";
 
 import {
   HealthHistoryWired,
@@ -30,11 +30,10 @@ function App(): React.JSX.Element {
         </Flex>
         <Divider size="lg" />
         <Flex flex={1}>
-          <Flex direction={"column"} flex={1}>
+          <Stack flex={1}>
             <Flex h={"90%"}>
               <HealthHistoryWired data={data} />
             </Flex>
-            <Divider size="lg" />
             <Flex flex={1}>
               <DataHistoryWired
                 history={history}
@@ -42,7 +41,7 @@ function App(): React.JSX.Element {
                 resetHistory={resetHistory}
               />
             </Flex>
-          </Flex>
+          </Stack>
         </Flex>
       </Flex>
     </AppShell>
