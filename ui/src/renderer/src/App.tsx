@@ -2,7 +2,6 @@ import { useStream } from "./stream";
 import { AppShell, Flex, Divider } from "@mantine/core";
 
 import {
-  MonitorStateWired,
   HealthHistoryWired,
   FieldMonitorWired,
   HealthMonitorWired,
@@ -31,19 +30,13 @@ function App(): React.JSX.Element {
         </Flex>
         <Divider size="lg" />
         <Flex h={"20%"}>
-          <Flex flex={1}>
-            <Flex w={"10%"}>
-              <MonitorStateWired data={data} />
+          <Flex direction={"column"} flex={1}>
+            <Flex h={"90%"}>
+              <HealthHistoryWired data={data} />
             </Flex>
-            <Divider size="lg" orientation="vertical" />
-            <Flex direction={"column"} w={"90%"}>
-              <Flex h={"90%"}>
-                <HealthHistoryWired data={data} />
-              </Flex>
-              <Divider size="lg" />
-              <Flex flex={1}>
-                <DataHistoryWired history={history} data={data} />
-              </Flex>
+            <Divider size="lg" />
+            <Flex flex={1}>
+              <DataHistoryWired history={history} data={data} />
             </Flex>
           </Flex>
         </Flex>

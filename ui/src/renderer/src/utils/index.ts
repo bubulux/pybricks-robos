@@ -23,7 +23,7 @@ export function selectHealthHistory(data: TRobotSensorData): number[] {
   return data.HEALTH.filter((v) => typeof v === "number");
 }
 
-export function selectCurrenState(data: TRobotSensorData): TState {
+export function selectCurrentState(data: TRobotSensorData): TState {
   const { Health, Light } = selectMostRecentSensorData(data);
 
   if (Health === "INIT" || Light === "INIT") {

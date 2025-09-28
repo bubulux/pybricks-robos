@@ -62,7 +62,6 @@ export default function GameMonitor({
       <Divider size="lg" w={"100%"} bdrs="lg" />
       <PieChart data={data} strokeWidth={0} w={"100%"} />
       <Divider size="lg" w={"100%"} bdrs="lg" />
-
       <Group gap="xs">
         <Text size="xl" fw={700}>
           Time left:

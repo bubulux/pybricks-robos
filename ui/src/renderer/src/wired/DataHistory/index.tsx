@@ -1,6 +1,6 @@
 import { TRobotSensorData } from "@renderer/stream/models";
 import { DataHistoryPartial } from "@renderer/partials";
-import { selectCurrenState } from "@renderer/utils";
+import { selectCurrentState } from "@renderer/utils";
 
 type TProps = {
   history: boolean[];
@@ -11,7 +11,7 @@ export default function DataHistory({
   history,
   data,
 }: TProps): React.JSX.Element {
-  const state = selectCurrenState(data);
+  const state = selectCurrentState(data);
 
   return (
     <DataHistoryPartial history={history} isLoading={state === "Connecting"} />

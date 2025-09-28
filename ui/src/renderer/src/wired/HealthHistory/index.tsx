@@ -1,5 +1,5 @@
 import { HealthHistoryPartial } from "@renderer/partials";
-import { selectCurrenState, selectHealthHistory } from "@renderer/utils";
+import { selectCurrentState, selectHealthHistory } from "@renderer/utils";
 
 import { TRobotSensorData } from "@renderer/stream/models";
 
@@ -12,7 +12,7 @@ export default function HealthHistory({ data }: TProps): React.JSX.Element {
     return { time: i.toString(), value: v };
   });
 
-  const state = selectCurrenState(data);
+  const state = selectCurrentState(data);
 
   return (
     <HealthHistoryPartial data={history} isLoading={state === "Connecting"} />
