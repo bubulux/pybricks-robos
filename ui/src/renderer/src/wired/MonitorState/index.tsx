@@ -7,10 +7,6 @@ type TProps = {
   data: TRobotSensorData;
 };
 
-// INIT == Connecting
-// START == Connected
-// END | Empty == Disconnected
-
 export default function MonitorState({ data }: TProps): React.JSX.Element {
   const { Health, Light } = selectMostRecentSensorData(data);
 
@@ -18,7 +14,7 @@ export default function MonitorState({ data }: TProps): React.JSX.Element {
     return <MonitorStatePartial state="Connecting" />;
   }
 
-  if (Health === "START" || Light === "START") {
+  if (Health === "START" || Light === "START" || typeof Health === "number") {
     return <MonitorStatePartial state="Connected" />;
   }
 
