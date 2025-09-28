@@ -7,4 +7,5 @@ export type TField =
   | "Healing"
   | "Protected"
   | "Neutral"
-  | "Damaging";
+  | "Damaging"
+  | "Won";
