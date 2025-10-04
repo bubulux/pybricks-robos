@@ -1,5 +1,6 @@
 from typing import Callable, Literal
 from pybricks.pupdevices import ColorSensor
+from pybricks.parameters import Color as PBColor
 
 from utils.streamer import streamLightState
 
@@ -20,6 +21,12 @@ class Color:
         self._setIsProtected = setIsProtected
 
     def _colorToState(self, hue: int, saturation: int, value: int):
+
+        # YELLOW = H: 49,52 S: 64, 69 V: 15
+        # RED = H: 350, 355 S: 92, 93 V: 9,11
+        # GREEN = H: 120, 132 S: 55,59,65 V: 7, 11
+        # PINK = H: 330,335 S: 75,77 V: 7,9
+        # BLUE = H: 215,210  S: 93, 94  V: 5
 
         # Red == FORBIDDEN
         # Green == HEALING
@@ -64,8 +71,11 @@ class Color:
 
     def _updateCallBack(self):
         hue, saturation, value = self._colorSensor.hsv()
-        state = self._colorToState(hue, saturation, value)
-        self._execStateEffect(state)
+        print("H:", hue, "S:", saturation, "V:", value)
+        # state = self._colorToState(hue, saturation, value)
+        # self._execStateEffect(state)
+        # self._colorSensor.color()
+        # print("Color:", self._colorSensor.color())
 
     def listenForState(self):
         self._onOneSecondUpdate(self._updateCallBack)
