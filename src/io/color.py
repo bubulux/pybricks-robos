@@ -1,6 +1,5 @@
 from typing import Callable, Literal
 from pybricks.pupdevices import ColorSensor
-from pybricks.parameters import Color as PBColor
 
 from utils.streamer import streamLightState
 
@@ -20,23 +19,73 @@ class Color:
         self._onOneSecondUpdate = onOneSecondUpdate
         self._setIsProtected = setIsProtected
 
-    def _colorToState(self, hue: int, saturation: int, value: int):
-
+    def _hsvToColor(self, hue: int, saturation: int, value: int) -> Literal[
+        "YELLOW",
+        "RED",
+        "GREEN",
+        "PINK",
+        "BLUE",
+        "WHITE",
+        "BLACK",
+    ]:
         # YELLOW = H: 49,52 S: 64, 69 V: 15 (PROTECTED)
         # RED = H: 350, 355 S: 92, 93 V: 9,11 (DAMAGING)
         # GREEN = H: 120, 132 S: 55,59,65 V: 7, 11 (HEALING)
         # PINK = H: 330,335 S: 75,77 V: 7,9 (PROTECTED-DAMAGING)
         # BLUE = H: 215,210  S: 93, 94  V: 5 (WIN)
         # WHITE = H: 200, 220 S: 20 V: 19 (NEUTRAL)
-        # Everything else is FORBIDDEN
+        # BLACK = Everything else (FORBIDDEN)
 
-        # return "FORBIDDEN"
-        # return "HEALING"
-        # return "PROTECTED"
-        # return "DAMAGING"#
-        # return "WIN"
-        # return "PROTECTED-DAMAGING"
-        return "NEUTRAL"
+        if 49 <= hue <= 52 and 64 <= saturation <= 69 and value == 15:
+            return "YELLOW"
+        elif (hue >= 350 or hue <= 5) and 92 <= saturation <= 93 and 9 <= value <= 11:
+            return "RED"
+        elif 120 <= hue <= 132 and 55 <= saturation <= 65 and 7 <= value <= 11:
+            return "GREEN"
+        elif 330 <= hue <= 335 and 75 <= saturation <= 77 and 7 <= value <= 9:
+            return "PINK"
+        elif 210 <= hue <= 215 and 93 <= saturation <= 94 and value == 5:
+            return "BLUE"
+        elif 200 <= hue <= 220 and saturation == 20 and value == 19:
+            return "WHITE"
+        else:
+            return "BLACK"
+
+    def _colorToState(
+        self,
+        color: Literal[
+            "YELLOW",
+            "RED",
+            "GREEN",
+            "PINK",
+            "BLUE",
+            "WHITE",
+            "BLACK",
+        ],
+    ) -> Literal[
+        "FORBIDDEN",
+        "HEALING",
+        "PROTECTED",
+        "DAMAGING",
+        "NEUTRAL",
+        "PROTECTED-DAMAGING",
+        "WIN",
+    ]:
+
+        if color == "YELLOW":
+            return "PROTECTED"
+        elif color == "RED":
+            return "DAMAGING"
+        elif color == "GREEN":
+            return "HEALING"
+        elif color == "PINK":
+            return "PROTECTED-DAMAGING"
+        elif color == "BLUE":
+            return "WIN"
+        elif color == "WHITE":
+            return "NEUTRAL"
+        else:
+            return "FORBIDDEN"
 
     def _execStateEffect(
         self,
@@ -67,7 +116,8 @@ class Color:
 
     def _updateCallBack(self):
         hue, saturation, value = self._colorSensor.hsv()
-        print("H:", hue, "S:", saturation, "V:", value)
+        color = self._hsvToColor(hue, saturation, value)
+        print("Color:", color)
         # state = self._colorToState(hue, saturation, value)
         # self._execStateEffect(state)
         # self._colorSensor.color()
