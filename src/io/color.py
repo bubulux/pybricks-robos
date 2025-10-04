@@ -10,11 +10,13 @@ class Color:
         colorSensor: ColorSensor,
         setIsProtected: "Callable[[bool], None]",
         harm: "Callable[[int], None]",
+        harmWhileProtected: "Callable[[int], None]",
         heal: "Callable[[int], None]",
         onOneSecondUpdate: "Callable[[Callable[[], None]], None]",
     ):
         self._colorSensor = colorSensor
         self._harm = harm
+        self._harmWhileProtected = harmWhileProtected
         self._heal = heal
         self._onOneSecondUpdate = onOneSecondUpdate
         self._setIsProtected = setIsProtected
@@ -85,12 +87,19 @@ class Color:
         elif color == "WHITE":
             return "NEUTRAL"
         else:
-            return "FORBIDDEN"
+            return "NEUTRAL"
 
     def _execStateEffect(
         self,
         state: Literal[
-            "FORBIDDEN", "HEALING", "PROTECTED", "DAMAGING", "NEUTRAL", "START", "WIN"
+            "FORBIDDEN",
+            "HEALING",
+            "PROTECTED",
+            "DAMAGING",
+            "NEUTRAL",
+            "START",
+            "WIN",
+            "PROTECTED-DAMAGING",
         ],
     ):
         if state == "FORBIDDEN":
@@ -104,6 +113,10 @@ class Color:
         elif state == "PROTECTED":
             self._setIsProtected(True)
             streamLightState("PROTECTED")
+        elif state == "PROTECTED-DAMAGING":
+            self._setIsProtected(True)
+            streamLightState("PROTECTED-DAMAGING")
+            self._harmWhileProtected(5)
         elif state == "DAMAGING":
             self._setIsProtected(False)
             streamLightState("DAMAGING")
@@ -117,11 +130,8 @@ class Color:
     def _updateCallBack(self):
         hue, saturation, value = self._colorSensor.hsv()
         color = self._hsvToColor(hue, saturation, value)
-        print("Color:", color)
-        # state = self._colorToState(hue, saturation, value)
-        # self._execStateEffect(state)
-        # self._colorSensor.color()
-        # print("Color:", self._colorSensor.color())
+        state = self._colorToState(color)
+        self._execStateEffect(state)
 
     def listenForState(self):
         self._onOneSecondUpdate(self._updateCallBack)

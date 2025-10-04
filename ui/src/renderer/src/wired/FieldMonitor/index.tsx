@@ -12,6 +12,7 @@ export default function FieldMonitor({ data }: TProps): React.JSX.Element {
   const { Light } = selectMostRecentSensorData(data);
 
   function determineField(): TField {
+    if (Light === "PROTECTED-DAMAGING") return "Protected-Damaging";
     if (Light === "FORBIDDEN") return "Forbidden";
     if (Light === "DAMAGING") return "Damaging";
     if (Light === "WIN") return "Won";

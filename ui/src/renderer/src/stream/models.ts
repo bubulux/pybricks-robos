@@ -12,6 +12,7 @@ const ZLightLiterals = z.union([
   z.literal("FORBIDDEN"),
   z.literal("HEALING"),
   z.literal("PROTECTED"),
+  z.literal("PROTECTED-DAMAGING"),
   z.literal("DAMAGING"),
   z.literal("NEUTRAL"),
   z.literal("WIN"),

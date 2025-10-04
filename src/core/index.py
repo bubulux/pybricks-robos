@@ -46,6 +46,7 @@ class Core:
             self.colorSensor,
             self._setIsProtected,
             self.health.harm,
+            self.health.harmWhileProtected,
             self.health.heal,
             self._onOneSecondUpdate,
         )

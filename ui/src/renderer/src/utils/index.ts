@@ -7,8 +7,8 @@ import {
 import { TState } from "@renderer/types";
 
 export function selectMostRecentSensorData(data: TRobotSensorData): {
-  Health: Omit<TSensorValue, "NONE">;
-  Light: Omit<TLightValue, "NONE">;
+  Health: Exclude<TSensorValue, "NONE">;
+  Light: Exclude<TLightValue, "NONE">;
 } {
   const healthData = data.HEALTH.filter((v) => v !== "NONE").slice(-1)[0];
   const lightData = data.LIGHT.filter((v) => v !== "NONE").slice(-1)[0];
@@ -33,6 +33,7 @@ export function selectMostRecentLightEffect(data: TRobotSensorData): {
   const lightData = data.LIGHT.filter((v) => {
     return (
       v === "DAMAGING" ||
+      v === "PROTECTED-DAMAGING" ||
       v === "FORBIDDEN" ||
       v === "NEUTRAL" ||
       v === "HEALING"
@@ -46,6 +47,8 @@ export function selectMostRecentLightEffect(data: TRobotSensorData): {
   if (light === "FORBIDDEN") return { mode: "harm", effect: 20 };
 
   if (light === "HEALING") return { mode: "heal", effect: 5 };
+
+  if (light === "PROTECTED-DAMAGING") return { mode: "harm", effect: 5 };
 
   return { mode: "neutral", effect: 0 };
 }

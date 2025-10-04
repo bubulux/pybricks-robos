@@ -21,8 +21,8 @@ export function getColor(field: TField): string {
       return "red";
     case "Healing":
       return "green";
-    case "Neutral":
-      return "gray";
+    case "Protected-Damaging":
+      return "red";
     default:
       return "gray";
   }
@@ -40,8 +40,8 @@ export function getIcon(field: TField): React.JSX.Element {
       return <IconHeartMinus size={128} />;
     case "Healing":
       return <IconHeartPlus size={128} />;
-    case "Neutral":
-      return <IconNut size={128} />;
+    case "Protected-Damaging":
+      return <IconShieldFilled size={128} />;
     default:
       return <IconNut size={128} />;
   }
@@ -61,6 +61,8 @@ export function getText(field: TField): string {
       return "This area has no special properties.";
     case "Won":
       return "You have reached the goal area! Congratulations!";
+    case "Protected-Damaging":
+      return "You are protected, but you still lose 5 health points every second!";
     default:
       return "This area has no special properties.";
   }
