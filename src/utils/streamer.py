@@ -13,6 +13,7 @@ class SensorStreamer:
             "FORBIDDEN",
             "HEALING",
             "PROTECTED",
+            "PROTECTED-DAMAGING",
             "DAMAGING",
             "NEUTRAL",
             "END",
@@ -61,7 +62,15 @@ def streamHealth(value: int) -> None:
 
 
 def streamLightState(
-    state: Literal["FORBIDDEN", "HEALING", "PROTECTED", "DAMAGING", "NEUTRAL", "WIN"],
+    state: Literal[
+        "FORBIDDEN",
+        "HEALING",
+        "PROTECTED",
+        "PROTECTED-DAMAGING",
+        "DAMAGING",
+        "NEUTRAL",
+        "WIN",
+    ],
 ) -> None:
     """Stream only light data"""
     SensorStreamer.printSensors(lightState=state)

@@ -22,25 +22,20 @@ class Color:
 
     def _colorToState(self, hue: int, saturation: int, value: int):
 
-        # YELLOW = H: 49,52 S: 64, 69 V: 15
-        # RED = H: 350, 355 S: 92, 93 V: 9,11
-        # GREEN = H: 120, 132 S: 55,59,65 V: 7, 11
-        # PINK = H: 330,335 S: 75,77 V: 7,9
-        # BLUE = H: 215,210  S: 93, 94  V: 5
-        # WHITE = H: 200, 220 S: 20 V: 19
-
-        # Red == FORBIDDEN
-        # Green == HEALING
-        # Yellow == PROTECTED
-        # Orange == DAMAGING
-        # White == NEUTRAL
-        # Blue == WIN
+        # YELLOW = H: 49,52 S: 64, 69 V: 15 (PROTECTED)
+        # RED = H: 350, 355 S: 92, 93 V: 9,11 (DAMAGING)
+        # GREEN = H: 120, 132 S: 55,59,65 V: 7, 11 (HEALING)
+        # PINK = H: 330,335 S: 75,77 V: 7,9 (PROTECTED-DAMAGING)
+        # BLUE = H: 215,210  S: 93, 94  V: 5 (WIN)
+        # WHITE = H: 200, 220 S: 20 V: 19 (NEUTRAL)
+        # Everything else is FORBIDDEN
 
         # return "FORBIDDEN"
         # return "HEALING"
         # return "PROTECTED"
         # return "DAMAGING"#
         # return "WIN"
+        # return "PROTECTED-DAMAGING"
         return "NEUTRAL"
 
     def _execStateEffect(
