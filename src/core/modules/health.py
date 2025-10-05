@@ -1,12 +1,12 @@
+from typing import Callable
 from utils.streamer import streamHealth
 
 
 class Health:
 
-    def __init__(self, isProtected: bool):
-        self._isProtected = isProtected
-
-    healthpoints = 100
+    def __init__(self, getIsProtected: Callable[[], bool]):
+        self._getIsProtected = getIsProtected
+        self.healthpoints = 100
 
     def check(self):
         if self.healthpoints <= 0:
@@ -19,7 +19,7 @@ class Health:
         streamHealth(self.healthpoints)
 
     def harm(self, damage: int):
-        if self._isProtected:
+        if self._getIsProtected():
             return
         self.healthpoints -= damage
         streamHealth(self.healthpoints)

@@ -33,7 +33,7 @@ class Core:
         self.leftMotor = leftMotor
         self.isProtected = False
 
-        self.health = Health(self.isProtected)
+        self.health = Health(self._getIsProtected)
         self.movement = Movement(self.rightMotor, self.leftMotor)
         self.display = Display()
         self.feeler = Feeler(
@@ -55,6 +55,9 @@ class Core:
 
     def _setIsProtected(self, value: bool):
         self.isProtected = value
+
+    def _getIsProtected(self) -> bool:
+        return self.isProtected
 
     def _onOneSecondUpdate(self, cb: "Callable[[], None]"):
         if self._accumulatedTime >= 1000:
