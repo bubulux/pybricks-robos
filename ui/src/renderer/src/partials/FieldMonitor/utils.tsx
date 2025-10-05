@@ -12,17 +12,17 @@ import { TField } from "@renderer/types";
 export function getColor(field: TField): string {
   switch (field) {
     case "Won":
-      return "grape";
+      return "blue";
     case "Forbidden":
       return "red";
     case "Protected":
-      return "blue";
+      return "yellow";
     case "Damaging":
       return "red";
     case "Healing":
       return "green";
     case "Protected-Damaging":
-      return "red";
+      return "grape";
     default:
       return "gray";
   }
