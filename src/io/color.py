@@ -38,7 +38,9 @@ class Color:
         # WHITE = H: 200, 220 S: 20 V: 19 (NEUTRAL)
         # BLACK = Everything else (FORBIDDEN)
 
-        if 49 <= hue <= 52 and 64 <= saturation <= 69 and value == 15:
+        print(hue, saturation, value)
+
+        if 40 <= hue <= 60 and 60 <= saturation <= 75 and 10 <= value <= 20:
             return "YELLOW"
         elif (hue >= 350 or hue <= 5) and 92 <= saturation <= 93 and 9 <= value <= 11:
             return "RED"
