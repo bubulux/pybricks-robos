@@ -5,6 +5,9 @@ class Controller:
     def __init__(self, controller: XboxController):
         self._controller = controller
 
+    def shortRumble(self):
+        self._controller.rumble(200)
+
     def forward(self):
         val = self._controller.triggers()[1]
         if val == 0:

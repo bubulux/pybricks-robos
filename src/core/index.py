@@ -16,6 +16,7 @@ class Core:
     def __init__(
         self,
         eventLoopRefreshRate: int,
+        shortRumble: Callable[[], None],
         primeHub: PrimeHub,
         rightFeel: ForceSensor,
         leftFeel: ForceSensor,
@@ -32,8 +33,9 @@ class Core:
         self.rightMotor = rightMotor
         self.leftMotor = leftMotor
         self.isProtected = False
+        self._shortRumble = shortRumble
 
-        self.health = Health(self._getIsProtected)
+        self.health = Health(self._getIsProtected, self._shortRumble)
         self.movement = Movement(self.rightMotor, self.leftMotor)
         self.display = Display()
         self.feeler = Feeler(

@@ -22,8 +22,11 @@ XBoxController = XboxController()
 
 refreshRate = 50  # milliseconds
 
+controller = Controller(XBoxController)
+
 core = Core(
     refreshRate,
+    controller.shortRumble,
     hub,
     rightFeel,
     leftFeel,
@@ -33,6 +36,5 @@ core = Core(
     leftMotor,
 )
 
-controller = Controller(XBoxController)
 
 EventLoop(core, controller, refreshRate).run()
