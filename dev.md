@@ -6,7 +6,7 @@
 python -m venv .venv
 
 # Activate it
-source venv/Scripts/activate
+source .venv/Scripts/activate
 
 # Depedencies... 
 pip install -r requirements.txt
