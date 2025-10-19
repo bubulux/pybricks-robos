@@ -1,5 +1,16 @@
-# The Game of Terry 
-
-The Game of Terry (Terries Spiel) ist ein Angriffs- und Verteidigungs-Spiel in dem ein Roboter Namens Terry von einer Seite des Spielfeldes zu dem anderen Gelingen muss. 
-
- 
+![alt text](assets/Slide1.jpg)
+![alt text](assets/Slide2.jpg)
+![alt text](assets/Slide3.jpg)
+![alt text](assets/Slide4.jpg)
+![alt text](assets/Slide5.jpg)
+![alt text](assets/Slide6.jpg)
+![alt text](assets/Slide7.jpg)
+![alt text](assets/Slide8.jpg)
+![alt text](assets/Slide9.jpg)
+![alt text](assets/Slide10.jpg)
+![alt text](assets/Slide11.jpg)
+![alt text](assets/Slide12.jpg)
+![alt text](assets/Slide13.jpg)
+![alt text](assets/Slide14.jpg)
+![alt text](assets/Slide15.jpg)
+![alt text](assets/Slide16.jpg)
