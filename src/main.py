@@ -5,17 +5,3 @@ from movement import (
     drehungRechts,
     abliefern,
 )
-
-schrittVorwaerts()
-
-drehungRechts()
-
-schrittVorwaerts()
-
-schrittVorwaerts()
-
-drehungLinks()
-
-schrittRueckwaerts()
-
-abliefern()
