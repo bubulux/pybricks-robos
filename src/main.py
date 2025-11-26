@@ -1,10 +1,21 @@
-from pybricks.hubs import PrimeHub
-from pybricks.parameters import Direction, Port
-from pybricks.pupdevices import Motor
+from movement import (
+    schrittRueckwaerts,
+    schrittVorwaerts,
+    drehungLinks,
+    drehungRechts,
+    abliefern,
+)
 
-rightMotor = Motor(Port.D)
-leftMotor = Motor(Port.C, Direction.COUNTERCLOCKWISE)
+schrittVorwaerts()
 
-while True:
-    rightMotor.run(500)
-    leftMotor.run(500)
+drehungRechts()
+
+schrittVorwaerts()
+
+schrittVorwaerts()
+
+drehungLinks()
+
+schrittRueckwaerts()
+
+abliefern()
