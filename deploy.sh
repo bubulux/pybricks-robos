@@ -9,6 +9,6 @@ echo "Building project for PyBricks..."
 .venv/Scripts/python.exe utils/build.py
 
 echo "Deploying to PyBricks robot 'bubulux'..."
-python -m pybricksdev run ble -n fums build/main.py
+python -m pybricksdev run ble -n Fums build/main.py
 
 echo "Build and deployment complete!"
