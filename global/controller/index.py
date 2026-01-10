@@ -1,0 +1,1 @@
+# Module for easy mapping of x box controller inputs to actions
