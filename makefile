@@ -53,6 +53,7 @@ robots-purge-builds:
 	@rm -rf $(build)/*
 
 robots-build:
-	@$(v-python) $(builder)
-
+	@echo "Building robots..."
+	@$(v-python) $(builder) --silent
+	@echo "Build complete..."
 # ------------

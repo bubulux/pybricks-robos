@@ -15,17 +15,24 @@ except ImportError:
 
 
 def build_for_pybricks():
-
     """Build source files for PyBricks by stripping type annotations."""
-    import sys
-    if len(sys.argv) > 1:
-        source_dir = Path(sys.argv[1])
-    else:
-        source_dir = Path("src")
-    if len(sys.argv) > 2:
-        build_dir = Path(sys.argv[2])
-    else:
-        build_dir = Path("build")
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser(
+        description="Build source files for PyBricks by stripping type annotations."
+    )
+    parser.add_argument("source_dir", nargs="?", default="src", help="Source directory")
+    parser.add_argument("build_dir", nargs="?", default="build", help="Build directory")
+    parser.add_argument("-s", "--silent", action="store_true", help="Suppress output")
+    args = parser.parse_args()
+
+    source_dir = Path(args.source_dir)
+    build_dir = Path(args.build_dir)
+    silent = args.silent
+
+    def echo(msg):  # type: ignore
+        if not silent:
+            print(msg)  # type: ignore
 
     # Clean build directory
     if build_dir.exists():
@@ -37,10 +44,10 @@ def build_for_pybricks():
     # Find all Python files in build directory
     python_files = list(build_dir.rglob("*.py"))
 
-    print(f"Stripping type annotations from {len(python_files)} files...")
+    echo(f"Stripping type annotations from {len(python_files)} files...")
 
     for py_file in python_files:
-        print(f"Processing: {py_file}")
+        echo(f"Processing: {py_file}")
 
         try:
             # Strip type annotations
@@ -67,12 +74,12 @@ def build_for_pybricks():
                 with open(py_file, "w", encoding="utf-8") as f:
                     f.write(final_code)
             else:
-                print(f"Warning: strip_hints returned unexpected type for {py_file}")
+                echo(f"Warning: strip_hints returned unexpected type for {py_file}")
 
         except Exception as e:
-            print(f"Warning: Failed to process {py_file}: {e}")
+            echo(f"Warning: Failed to process {py_file}: {e}")
 
-    print(f"Build complete! Files ready in '{build_dir}' directory")
+    echo(f"Build complete! Files ready in '{build_dir}' directory")
 
 
 if __name__ == "__main__":
