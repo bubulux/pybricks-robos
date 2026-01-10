@@ -1,3 +1,6 @@
+
+# Global Variables ------------------------------------------
+
 v-pip=.venv/bin/pip
 v-python=.venv/bin/python
 
@@ -19,41 +22,59 @@ env-update:
 
 # Robots ------------------------------------------------------
 
-# VARS
-
-bb=blue-body
-bl=blue-legs
-rb=red-body
-rl=red-legs
-
 build=build
 
-$(bb)-src=robots/blue/body
-$(bb)-main=$(build)/$($(bb)-src)/index.py
-$(bb)-name=NAME_OF_BLUE_BODY_ROBOT
+# Robot config variables (simple assignment)
+blue_body_name=NAME_OF_BLUE_BODY_ROBOT
+blue_body_main=build/blue/body/index.py
 
-$(bl)-src=robots/blue/legs
-$(bl)-main=$($(bl)-src)/index.py
-$(bl)-name=NAME_OF_BLUE_LEGS_ROBOT
+blue_legs_name=NAME_OF_BLUE_LEGS_ROBOT
+blue_legs_main=build/blue/legs/index.py
 
-$(rb)-src=robots/red/body
-$(rb)-main=$($(rb)-src)/index.py
-$(rb)-name=NAME_OF_RED_BODY_ROBOT
+red_body_name=NAME_OF_RED_BODY_ROBOT
+red_body_main=build/red/body/index.py
 
-$(rl)-src=robots/red/legs
-$(rl)-main=$($(rl)-src)/index.py
-$(rl)-name=NAME_OF_RED_LEGS_ROBOT
+red_legs_name=NAME_OF_RED_LEGS_ROBOT
+red_legs_main=build/red/legs/index.py
 
 
-# ------------
-
-# SCRIPTS
+# BUILD ------------------------------------------------------
 
 robots-purge-builds:
 	@rm -rf $(build)/*
 
 robots-build:
-	@echo "Building robots..."
+	@echo "Building Robots..."
 	@$(v-python) $(builder) --silent
-	@echo "Build complete..."
-# ------------
+	@echo "Build Complete."
+
+# DEPLOY ----------------------------------------------------
+
+# Generic BLE deploy function
+deploy-ble:
+	@$(v-python) -m pybricksdev run ble -n $(ROBOT_NAME) $(MAIN_PY)
+
+# Example usage targets
+	@echo "Deploying to Blue Body Robot..."
+	$(MAKE) robots-build
+	$(MAKE) deploy-ble ROBOT_NAME=$(blue_body_name) MAIN_PY=$(blue_body_main)
+
+robots-deploy-blue-body:
+	@echo "Deploying to Blue Body Robot..."
+	-$(MAKE) robots-build --no-print-directory
+	-$(MAKE) deploy-ble ROBOT_NAME=$(blue_body_name) MAIN_PY=$(blue_body_main) --no-print-directory
+
+robots-deploy-blue-legs:
+	@echo "Deploying to Blue Legs Robot..."
+	-$(MAKE) robots-build --no-print-directory
+	-$(MAKE) deploy-ble ROBOT_NAME=$(blue_legs_name) MAIN_PY=$(blue_legs_main) --no-print-directory
+
+robots-deploy-red-body:
+	@echo "Deploying to Red Body Robot..."
+	-$(MAKE) robots-build --no-print-directory
+	-$(MAKE) deploy-ble ROBOT_NAME=$(red_body_name) MAIN_PY=$(red_body_main) --no-print-directory
+
+robots-deploy-red-legs:
+	@echo "Deploying to Red Legs Robot..."
+	-$(MAKE) robots-build --no-print-directory
+	-$(MAKE) deploy-ble ROBOT_NAME=$(red_legs_name) MAIN_PY=$(red_legs_main) --no-print-directory
