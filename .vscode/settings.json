@@ -26,5 +26,10 @@
     "flake8.ignorePatterns": ["build"],
     "black-formatter.args": [
         "--line-length=88"
-    ]
+    ],
+
+    "workbench.editor.customLabels.patterns": {
+        "**/index.py": "${dirname(-2)}.${dirname(-3)}.${dirname}.module"
+    }
+
 }

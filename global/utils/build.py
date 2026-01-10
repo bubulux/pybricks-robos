@@ -15,10 +15,17 @@ except ImportError:
 
 
 def build_for_pybricks():
-    """Build source files for PyBricks by stripping type annotations."""
 
-    source_dir = Path("src")
-    build_dir = Path("build")
+    """Build source files for PyBricks by stripping type annotations."""
+    import sys
+    if len(sys.argv) > 1:
+        source_dir = Path(sys.argv[1])
+    else:
+        source_dir = Path("src")
+    if len(sys.argv) > 2:
+        build_dir = Path(sys.argv[2])
+    else:
+        build_dir = Path("build")
 
     # Clean build directory
     if build_dir.exists():
