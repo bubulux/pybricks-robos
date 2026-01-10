@@ -10,13 +10,4 @@
         "dbaeumer.vscode-eslint",
         "mechatroner.rainbow-csv"
     ]
-}{
-    "recommendations": [
-        "ms-python.vscode-python-envs",
-        "ms-python.debugpy",
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "ms-python.black-formatter",
-        "ms-python.flake8"
-    ]
 }
