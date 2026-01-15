@@ -31,10 +31,10 @@ blue_body_main=build/blue/body/index.py
 blue_legs_name=NAME_OF_BLUE_LEGS_ROBOT
 blue_legs_main=build/blue/legs/index.py
 
-red_body_name=NAME_OF_RED_BODY_ROBOT
+red_body_name=Lohm
 red_body_main=build/red/body/index.py
 
-red_legs_name=NAME_OF_RED_LEGS_ROBOT
+red_legs_name=Fums
 red_legs_main=build/red/legs/index.py
 
 
