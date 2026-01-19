@@ -50,14 +50,10 @@ robots-build:
 
 # DEPLOY ----------------------------------------------------
 
+
 # Generic BLE deploy function
 deploy-ble:
 	@$(v-python) -m pybricksdev run ble -n $(ROBOT_NAME) $(MAIN_PY)
-
-# Example usage targets
-	@echo "Deploying to Blue Body Robot..."
-	$(MAKE) robots-build
-	$(MAKE) deploy-ble ROBOT_NAME=$(blue_body_name) MAIN_PY=$(blue_body_main)
 
 robots-deploy-blue-body:
 	@echo "Deploying to Blue Body Robot..."
