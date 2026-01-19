@@ -6,8 +6,10 @@ from pybricks.tools import wait
 from common.movement.index import Movement
 from common.controller.index import Controller
 
-leftMotor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
-rightMotor = Motor(Port.B)
+leftMotor = Motor(
+    Port.A,
+)
+rightMotor = Motor(Port.B, Direction.COUNTERCLOCKWISE)
 body = Motor(Port.D)
 
 controller = XboxController()
