@@ -19,14 +19,25 @@ controller = Controller(XboxController())
 
 body.run_target(300, 0)
 
+isWigglingRotor = False
+
 while True:
     wait(100)
 
-    if controller.dPadNeutral():
+    if controller.isPressedA():
+        isWigglingRotor = True
+
+    if controller.isPressedY():
+        isWigglingRotor = False
+
+    if isWigglingRotor:
+        body.run(400)
+
+    if controller.dPadNeutral() and not isWigglingRotor:
         body.stop()
-    elif controller.dPadRight():
+    elif controller.dPadRight() and not isWigglingRotor:
         body.run(300)
-    elif controller.dPadLeft():
+    elif controller.dPadLeft() and not isWigglingRotor:
         body.run(-300)
 
     isForward, forwardPercent = controller.forward()

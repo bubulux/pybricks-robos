@@ -47,3 +47,12 @@ class Controller:
 
     def isPressedA(self):
         return Button.A in self._controller.buttons.pressed()
+
+    def isPressedB(self):
+        return Button.B in self._controller.buttons.pressed()
+
+    def isPressedX(self):
+        return Button.X in self._controller.buttons.pressed()
+
+    def isPressedY(self):
+        return Button.Y in self._controller.buttons.pressed()
