@@ -1,5 +1,5 @@
 from pybricks.hubs import PrimeHub
-from pybricks.parameters import Direction, Port, Button
+from pybricks.parameters import Direction, Port
 from pybricks.iodevices import XboxController
 from pybricks.pupdevices import Motor
 from pybricks.tools import wait
@@ -27,26 +27,19 @@ body.run_target(300, 0)
 while True:
     wait(100)
 
-    # 1 UP
-    # 7 LEFT
-    # 3 RIGHT
-    # 5 DOWN
-    dPadDir = controllerO.dpad()
-    button = controllerO.buttons
-
-    if dPadDir == 0:
+    if controller.dPadNeutral():
         body.stop()
         hub.ble.broadcast("neutral")
-    if dPadDir == 1:
+    if controller.dPadUp():
         hub.ble.broadcast("up")
-    elif dPadDir == 3:
+    elif controller.dPadRight():
         body.run(300)
-    elif dPadDir == 5:
+    elif controller.dPadDown():
         hub.ble.broadcast("down")
-    elif dPadDir == 7:
+    elif controller.dPadLeft():
         body.run(-300)
 
-    if button.pressed() == {Button.A}:
+    if controller.isPressedA():
         hub.ble.broadcast("reset")
 
     isForward, forwardPercent = controller.forward()

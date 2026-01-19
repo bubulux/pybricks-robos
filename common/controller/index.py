@@ -1,4 +1,5 @@
 from pybricks.iodevices import XboxController
+from pybricks.parameters import Button
 
 
 class Controller:
@@ -28,3 +29,21 @@ class Controller:
             return ("left", abs(horizontalVal) // 2)
         else:
             return ("neutral", 0)
+
+    def dPadUp(self):
+        return self._controller.dpad() == 1
+
+    def dPadRight(self):
+        return self._controller.dpad() == 3
+
+    def dPadDown(self):
+        return self._controller.dpad() == 5
+
+    def dPadLeft(self):
+        return self._controller.dpad() == 7
+
+    def dPadNeutral(self):
+        return self._controller.dpad() == 0
+
+    def isPressedA(self):
+        return Button.A in self._controller.buttons.pressed()
