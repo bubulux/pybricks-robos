@@ -22,6 +22,8 @@ movement = Movement(leftMotor, rightMotor)
 controller = Controller(controllerO)
 
 
+body.run_angle(300, 0)
+
 while True:
     wait(100)
 
