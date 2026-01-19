@@ -4,7 +4,7 @@
 v-pip=.venv/bin/pip
 v-python=.venv/bin/python
 
-builder=global/utils/build.py
+builder=common/utils/build.py
 
 # Environment -------------------------------------------------
 
