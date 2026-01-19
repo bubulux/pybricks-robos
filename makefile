@@ -28,7 +28,7 @@ build=build
 blue_body_name=NAME_OF_BLUE_BODY_ROBOT
 blue_body_main=build/blue/body/index.py
 
-blue_legs_name=NAME_OF_BLUE_LEGS_ROBOT
+blue_legs_name=Sums
 blue_legs_main=build/blue/legs/index.py
 
 red_body_name=Lohm

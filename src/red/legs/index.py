@@ -15,11 +15,8 @@ leftMotor = Motor(
 rightMotor = Motor(Port.B, Direction.COUNTERCLOCKWISE)
 body = Motor(Port.D)
 
-controllerO = XboxController()
-
-
 movement = Movement(leftMotor, rightMotor)
-controller = Controller(controllerO)
+controller = Controller(XboxController())
 
 
 body.run_target(300, 0)
