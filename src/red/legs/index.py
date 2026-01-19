@@ -21,6 +21,7 @@ controllerO = XboxController()
 movement = Movement(leftMotor, rightMotor)
 controller = Controller(controllerO)
 
+
 while True:
     wait(100)
 
@@ -32,6 +33,7 @@ while True:
 
     if dPadDir == 0:
         body.stop()
+        hub.ble.broadcast("neutral")
     if dPadDir == 1:
         hub.ble.broadcast("up")
     elif dPadDir == 3:
