@@ -36,7 +36,7 @@ class Color:
         # PINK = H: 330,335 S: 75,77 V: 7,9 (PROTECTED-DAMAGING)
         # BLUE = H: 215,210  S: 93, 94  V: 5 (WIN)
         # WHITE = H: 200, 220 S: 20 V: 19 (NEUTRAL)
-        # BLACK = Everything else (FORBIDDEN)
+        # BLACK =  H: 210, S: 43, V: 5 (FORBIDDEN)
 
         if 40 <= hue <= 60 and 60 <= saturation <= 75 and 10 <= value <= 20:
             return "YELLOW"
@@ -50,8 +50,10 @@ class Color:
             return "BLUE"
         elif 200 <= hue <= 220 and saturation == 20 and value == 19:
             return "WHITE"
-        else:
+        elif hue == 210 and saturation == 43 and value == 5:
             return "BLACK"
+        else:
+            return "WHITE"
 
     def _colorToState(
         self,
@@ -86,6 +88,8 @@ class Color:
             return "WIN"
         elif color == "WHITE":
             return "NEUTRAL"
+        elif color == "BLACK":
+            return "FORBIDDEN"
         else:
             return "NEUTRAL"
 
