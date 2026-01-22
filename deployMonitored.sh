@@ -6,7 +6,7 @@
 set -e  # Exit on any error
 
 echo "Building project for PyBricks..."
-.venv/Scripts/python.exe utils/build.py
+.venv/bin/python utils/build.py
 
 echo "Starting monitoring of deployed version..."
-.venv/Scripts/python.exe utils/monitor.py
+.venv/bin/python utils/monitor.py 

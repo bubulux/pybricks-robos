@@ -62,7 +62,7 @@ def capture_robot_logs():
     process = None
     try:
         # Use the Python executable from your virtual environment
-        python_exe = r".venv\Scripts\python.exe"
+        python_exe = ".venv/bin/python"
 
         # Start the robot program with additional buffering control
         process = subprocess.Popen(
