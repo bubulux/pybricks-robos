@@ -12,13 +12,13 @@ class Controller:
         val = self._controller.triggers()[1]
         if val == 0:
             return (False, 0)
-        return (True, val // 3)
+        return (True, val // 2)
 
     def backward(self):
         val = self._controller.triggers()[0]
         if val == 0:
             return (False, 0)
-        return (True, val // 3)
+        return (True, val // 2)
 
     def tilt(self):
         horizontalVal = self._controller.joystick_left()[0]
