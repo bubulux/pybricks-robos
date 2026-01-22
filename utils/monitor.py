@@ -53,10 +53,8 @@ def capture_robot_logs():
     # Initialize CSV file with header and INIT row
     global csv_file_handle
     csv_file_handle = open(csv_filename, "w", encoding="utf-8")
-    csv_file_handle.write(
-        "HEALTH,LIGHT, PRESSURE_LEFT, PRESSURE_RIGHT, PRESSURE_BACK\n"
-    )
-    csv_file_handle.write("INIT, INIT, INIT, INIT, INIT\n")
+    csv_file_handle.write("HEALTH,LIGHT,PRESSURE_LEFT,PRESSURE_RIGHT,PRESSURE_BACK\n")
+    csv_file_handle.write("INIT,INIT,INIT,INIT,INIT\n")
     csv_file_handle.flush()
 
     process = None
@@ -156,6 +154,10 @@ def _is_valid_csv_line(line: str) -> bool:
 
     # Skip empty lines
     if not line:
+        return False
+
+    # Skip Python dict/set output (debug prints)
+    if "{" in line or "}" in line:
         return False
 
     # Skip connection/search messages

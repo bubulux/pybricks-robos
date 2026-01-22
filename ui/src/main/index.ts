@@ -144,7 +144,8 @@ app.whenReady().then(async () => {
       // Use chokidar for file system events (fast detection)
       fileWatcher = chokidar.watch(csvFilePath, {
         persistent: true,
-        usePolling: false,
+        usePolling: true,
+        interval: 100,
         ignoreInitial: true,
         awaitWriteFinish: {
           stabilityThreshold: 50,
