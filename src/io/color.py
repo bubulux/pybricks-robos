@@ -42,7 +42,7 @@ class Color:
             return "YELLOW"
         elif (hue >= 350 or hue <= 5) and 92 <= saturation <= 93 and 9 <= value <= 11:
             return "RED"
-        elif 120 <= hue <= 132 and 55 <= saturation <= 65 and 7 <= value <= 11:
+        elif 100 <= hue <= 110 and 55 <= saturation <= 65 and 7 <= value <= 11:
             return "GREEN"
         elif 330 <= hue <= 335 and 75 <= saturation <= 77 and 7 <= value <= 9:
             return "PINK"
